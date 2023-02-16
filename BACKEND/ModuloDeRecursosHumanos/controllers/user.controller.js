@@ -12,21 +12,6 @@ const LoginModel = require ("../models/login.model");
 const loginDb = new LoginModel();
 
 class UserController { 
-    async login(email,password){
-        try {
-            const result = loginDb.authenticate(email,password);
-            const data = await result.catch((err)=>{
-                console.log("Controller Error: ", err);
-                return null;
-            });
-            return data;
-        } catch (error) {
-            console.log("Controller Error: ", err);
-            return null;
-        }
-    }
-
-
      
     async getAll(){
         try {
@@ -53,6 +38,20 @@ class UserController {
             return data;
         } catch (error) {
             console.log("Controller Error: ", err);
+            return null;
+        }
+    }
+
+    async authenticate(email,password){
+        try {
+            const result = loginDb.authenticate(email,password);
+            const data = await result.catch((err)=>{
+                console.log("Controller Error: ", err);
+                return null;
+            })
+            return data;
+        } catch (error) {
+            console.log("Controller Error: ", error);
             return null;
         }
     }
