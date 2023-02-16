@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-export const Login =()=>{
+export const LoginForm =()=>{
     return(
         <section>
         <div class="signup">
