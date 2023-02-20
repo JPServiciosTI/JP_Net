@@ -52,17 +52,30 @@ DELIMITER ;
 USE jpnet;
 DELIMITER //
 DROP PROCEDURE IF EXISTS CrearContratoVigente;
-CREATE PROCEDURE CrearContratoVigente(IN DNI_IN VARCHAR(10), IN FINICIO_IN DATE,IN FECHAFIN_IN DATE, IN SUELDO_BASE_IN FLOAT,IN CISPP_IN VARCHAR(25),IN NHijos_IN FLOAT )
+CREATE PROCEDURE CrearContratoVigente(IN DNI_IN VARCHAR(10), IN FINICIO_IN DATE,IN FECHAFIN_IN DATE, IN SUELDO_BASE_IN FLOAT,IN CISPP_IN VARCHAR(25),IN NHijos_IN INT )
 BEGIN
 	DECLARE IDEmpleado INT;
     DECLARE IDContrato INT;
-	SET IDEmpleado = (SELECT EMP.idEmpleado FROM empleado EMP INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN); 
-	INSERT INTO contrato(idCondicionDeContrato,idEmpleado,FechaDeInicioDeContrato,FechaDeFinDeContrato) VALUES (1,IDEmpleado,FINICIO_IN,FECHAFIN_IN);
-    SET IDContrato = (SELECT CT.idContrato FROM jpnet.contrato CT INNER JOIN jpnet.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN);
-    INSERT INTO datoscontables(SueldoBase,CISPP,NHijos,idContrato) VALUES (SUELDO_BASE_IN,CISPP_IN,NHijos_IN,IDContrato);
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+		BEGIN # Si se produce una SQLEXCEPTION, se retrocede la transacción con ROLLBACK
+			SELECT 'SQLEXCEPTION!, transacción abortada' AS Resultado;
+			ROLLBACK;
+		END//
+	START TRANSACTION;
+		SET IDEmpleado = (SELECT EMP.idEmpleado FROM empleado EMP INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN); 
+		INSERT INTO contrato(idCondicionDeContrato,idEmpleado,FechaDeInicioDeContrato,FechaDeFinDeContrato) VALUES (1,IDEmpleado,FINICIO_IN,FECHAFIN_IN);
+		SET IDContrato = (SELECT CT.idContrato FROM jpnet.contrato CT INNER JOIN jpnet.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN AND CT.idCondicionDeContrato =1);
+		INSERT INTO datoscontables(SueldoBase,CISPP,NHijos,idContrato) VALUES (SUELDO_BASE_IN,CISPP_IN,NHijos_IN,IDContrato);
+		COMMIT;
 END//
 DELIMITER ;
-#CALL CrearContratoVigente("74624955","2023-01-16","2023-04-16");
+
+
+START TRANSACTION;
+SAVEPOINT sp1;
+	CALL CrearContratoVigente("74624957","2023-01-16","2023-04-16",1500,"000",0);
+ROLLBACK TO sp1;
+CALL CrearContratoVigente("74624957","2023-01-16","2023-04-16",1500,"000",0);
 #SELECT EMP.idEmpleado FROM empleado EMP INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN
 
 
