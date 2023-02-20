@@ -12,17 +12,17 @@ class LoginModel {
     }
 
   }
-  async authenticate(email, password) {
+  async authenticate(email, password_In) {
     try {
       const con = connectionDb.promise();
       const data = await con.query("CALL ObtenerUsuario(?)", [email] );
       console.log(data[0][0][0])
-        if (tools.compareHash(password, data[0][0][0].password)) {
+        if (tools.compareHash(password_In, data[0][0][0].password)) {
           
           return { status: "ok", id: data[0][0][0].PersonaId };
         }
         //console.log(data)
-        return { status: "error" };
+        return { status: "error", id:null };
     }catch (error) {
       console.log(error);
       return { status: "error" };

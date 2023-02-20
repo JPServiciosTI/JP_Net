@@ -47,12 +47,15 @@ class UserController {
             const result = loginDb.authenticate(email,password);
             const data = await result.catch((err)=>{
                 console.log("Controller Error: ", err);
-                return null;
+                return { status: "error", id: null };
             })
+            if(data.id==null){
+                return { status: "error", id: null };
+            }
             return data;
         } catch (error) {
             console.log("Controller Error: ", error);
-            return null;
+            return { status: "error", id: null };
         }
     }
 

@@ -6,9 +6,10 @@ const userController = new UserController;
 
 router.post("/login", async (req, res) => {
   try {
+    console.log(req.body.email, req.body.password)
     const info = await userController.authenticate(req.body.email, req.body.password);
     res.setHeader("Content-Type", "application/json");
-    if (info == null) {
+    if (info.status == null) {
       res.status(502).end(JSON.stringify(info)).json({
         status: "ERROR",
       });
@@ -18,7 +19,7 @@ router.post("/login", async (req, res) => {
     res.end(JSON.stringify(info));
   } catch (error) {
     console.log("Ruta Error: ", error);
-    return res.status(501);
+    return {status: res.status(501), id:null};
   }
 });
 
