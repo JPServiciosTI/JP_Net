@@ -2,6 +2,7 @@
  * Librerias
  */
 const express = require("express");
+
 const router = express.Router();
 
 /**
@@ -11,7 +12,7 @@ const router = express.Router();
 const LoginModel = require ("../models/login.model");
 const loginDb = new LoginModel();
 
-class UserController { 
+class LoginController { 
      
     async getAll(){
         try {
@@ -59,6 +60,23 @@ class UserController {
         }
     }
 
+    async authenticate(email,password){
+        try {
+            const result = loginDb.authenticate(email,password);
+            const data = await result.catch((err)=>{
+                console.log("Controller Error: ", err);
+                return { status: "error", id: null };
+            })
+            if(data.id==null){
+                return { status: "error", id: null };
+            }
+            return data;
+        } catch (error) {
+            console.log("Controller Error: ", error);
+            return { status: "error", id: null };
+        }
+    }
+
 
 }
-module.exports = UserController;
+module.exports = LoginController;

@@ -99,3 +99,41 @@ BEGIN
 END//
  DELIMITER ;
 #CALL CrearCandidatoNuevo(    "PIERO",	"VIZCARRA",	"VARGAS",	"74624957",	"977336451", "pevv2016@gmail.com",1500,6,9,"https://drive.google.com/file/d/1Ajm2azF7JIAMn4rDpmreFXXZB5QrJHOQ/view?usp=sharing");
+
+
+#### CREAR UN NUEVO CANDIDATO CON LOS PROCEDIMIENTOS ANTERIORES
+USE jpnet;
+DELIMITER //
+DROP PROCEDURE IF EXISTS ObtenerCandidatos;
+CREATE PROCEDURE ObtenerCandidatos(IN REG_INICIO INT, IN CANTIDAD_IN INT)
+BEGIN
+	SELECT * FROM jpnet.candidato CN WHERE CN.idCandidato >= REG_INICIO LIMIT CANTIDAD_IN;
+END//
+ DELIMITER ;
+ 
+
+CALL ObtenerCandidatos(0,5);
+
+USE jpnet;
+DELIMITER //
+DROP PROCEDURE IF EXISTS EliminarCandidato;
+CREATE PROCEDURE EliminarCandidato(IN REG_IN INT)
+BEGIN
+	DELETE FROM jpnet.candidato CN WHERE CN.idCandidato = REG_IN;
+END//
+ DELIMITER ;
+ 
+ 
+ USE jpnet;
+DELIMITER //
+DROP PROCEDURE IF EXISTS ActualizarCandidato;
+CREATE PROCEDURE ActualizarCandidato(IN IDCandidato_IN INT,IN EtapaPrevia_IN INT,IN EtapaDeLlamada_IN INT,IN EtapaEntrevista_IN INT,IN EtapaDeContratacion_IN INT)
+BEGIN
+	UPDATE jpnet.candidato CAND SET 
+    CAND.EtapaPrevia = EtapaPrevia_IN,
+    CAND.EtapaDeLlamada = EtapaDeLlamada_IN,
+    CAND.EtapaDeEntrevista = EtapaEntrevista_IN,
+    CAND.EtapaDeContratacion = EtapaDeContratacion_IN 
+    WHERE CAND.idCandidato = IDCandidato_IN; 
+END//
+ DELIMITER ;

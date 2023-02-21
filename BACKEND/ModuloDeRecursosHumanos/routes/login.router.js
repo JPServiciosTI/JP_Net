@@ -1,8 +1,8 @@
 var express = require("express");
 const router = express.Router();
 
-const UserController = require("../controllers/user.controller");
-const userController = new UserController;
+const LoginController = require("../controllers/login.controller");
+const loginController = new LoginController;
 
 router.post("/login", async (req, res) => {
   try {

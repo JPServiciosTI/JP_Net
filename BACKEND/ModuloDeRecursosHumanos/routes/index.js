@@ -1,12 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-const userRouter = require('./users.router');
+const userRouter = require('./login.router');
+const candidatoRouter = require("./candidato.router");
 
 /* GET home page. */
 function routerApi(app){
   app.use("/api/v1",router);
   router.use('/user',userRouter);
+  router.use('/candidato',candidatoRouter);
 }
 
 module.exports = routerApi;
