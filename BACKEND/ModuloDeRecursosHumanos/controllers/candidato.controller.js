@@ -2,7 +2,7 @@ const ContratoModel = require("../models/contratos.model");
 const CandidatoModel = require("../models/candidato.model");
 const candidatoDb = new CandidatoModel();
 
-class EmpleadoController{
+class CandidatoController{
     async create(                
         NOMBRE_IN,
         APELLIDO_PATERNO_IN,
@@ -38,26 +38,23 @@ class EmpleadoController{
     }
      
 
-    async updateProcesoDeSeleccion(                
-        IDCandidato,EtapaPrevia,EtapaDeLlamada,EtapaEntrevista,EtapaDeContratacion
-    ){
+    async updateProcesoDeSeleccion(  IDCandidato,EtapaPrevia,EtapaDeLlamada,EtapaEntrevista,EtapaDeContratacion){
         try {
-            const result = candidatoDb.updateProcesoDeSeleccion(    
-                IDCandidato,EtapaPrevia,EtapaDeLlamada,EtapaEntrevista,EtapaDeContratacion);
+            const result = candidatoDb.update( IDCandidato,EtapaPrevia,EtapaDeLlamada,EtapaEntrevista,EtapaDeContratacion);
             const data = await result.catch((err)=>{
                 console.log("Controller Error: ", err);
                 return null;
             });
             return data;
         } catch (error) {
-            console.log("Controller Error: ", err);
+            console.log("Controller Error: ", error);
             return null;
         }
     }
  
     async getForLimit(   ID_EMPLEADO_Inicio,Cantidad ){
         try {
-            const result = empleadoDb.getEmpleadoForLimit(  ID_EMPLEADO_Inicio,Cantidad);
+            const result = candidatoDb.getForLimit(  ID_EMPLEADO_Inicio,Cantidad);
             const data = await result.catch((err)=>{
                 console.log("Controller Error: ", err);
                 return null;
@@ -71,4 +68,4 @@ class EmpleadoController{
 
 
 }
-module.exports = EmpleadoController;
+module.exports = CandidatoController;

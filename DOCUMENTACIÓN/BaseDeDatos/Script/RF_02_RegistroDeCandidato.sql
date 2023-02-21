@@ -107,7 +107,7 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerCandidatos;
 CREATE PROCEDURE ObtenerCandidatos(IN REG_INICIO INT, IN CANTIDAD_IN INT)
 BEGIN
-	SELECT * FROM jpnet.candidato CN WHERE CN.idCandidato >= REG_INICIO LIMIT CANTIDAD_IN;
+	SELECT * FROM jpnet.candidato CN INNER JOIN jpnet.persona PO on CN.idPersona = PO.idPersona WHERE CN.idCandidato >= REG_INICIO LIMIT CANTIDAD_IN;
 END//
  DELIMITER ;
  

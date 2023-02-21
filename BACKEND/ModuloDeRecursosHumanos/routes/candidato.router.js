@@ -36,13 +36,17 @@ router.post("/register", async (req, res) => {
 
 router.put("/updateProcess", async (req, res) => {
     try {
-      console.log(req.body.email, req.body.password)
+      console.log(          req.body.dni,
+        req.body.etapaprevia,
+        req.body.etapadellamada,
+        req.body.etapadeentrevista,
+        req.body.etapadecontratacion)
       const info = await candidatoController.updateProcesoDeSeleccion(
           req.body.dni,
           req.body.etapaprevia,
           req.body.etapadellamada,
           req.body.etapadeentrevista,
-          req.body.etapadecontratacion,
+          req.body.etapadecontratacion
           );
       res.setHeader("Content-Type", "application/json");
       if (info.status == null) {
@@ -59,4 +63,22 @@ router.put("/updateProcess", async (req, res) => {
     }
   });
 
+  router.get("/getForLimit", async (req, res) => {
+    try {
+      console.log(req.body.idmin, req.body.cantidad)
+      const info = await candidatoController.getForLimit(req.body.idmin, req.body.cantidad);
+      res.setHeader("Content-Type", "application/json");
+      if (info.status == null) {
+        res.status(502).end(JSON.stringify(info)).json({
+          status: "ERROR",
+        });
+        return;
+      }
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify(info));
+    } catch (error) {
+      console.log("Ruta Error: ", error);
+      return {status: res.status(501), id:null};
+    }
+  });
   module.exports = router;

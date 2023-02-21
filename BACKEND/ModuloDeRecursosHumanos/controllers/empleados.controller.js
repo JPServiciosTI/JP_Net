@@ -1,7 +1,8 @@
 const ContratoModel = require("../models/contratos.model");
+const DireccionModel = require("../models/direccion.model");
 const EmpleadoModel = require("../models/empleado.model");
 const empleadoDb = new EmpleadoModel();
-
+const direcionDb = new DireccionModel();
 class EmpleadoController{
     async create(    NOMBRE_IN,
         APELLIDO_PATERNO_IN,
@@ -14,14 +15,23 @@ class EmpleadoController{
         NUMERODEEMERGENCIA_IN,
         ID_LOCALIDAD_NACIMIENTO_IN,
         ID_LOCALIDAD_ACTUAL_IN,
-        ID_DIRECCION_IN,
+        idTipoDeVia_IN , 
+        NombreDeVia_IN , 
+        idTipoDeLocalidad_IN ,
+        NombreLocalidad_IN,
         FECHA_DE_NACIMIENTO_IN,
         ID_TIPO_DE_SANGRE_IN,
         ALERGIAS_IN,
         ID_CARGO_IN,
         FONDO_PENSIONES_IN){
         try {
-            const result = empleadoDb.createEmpleado(    NOMBRE_IN,
+            const resultDireccion = direcionDb.create(   idTipoDeVia_IN , NombreDeVia_IN , idTipoDeLocalidad_IN , NombreLocalidad_IN)
+            const data1 = await resultDireccion.catch((err)=>{
+                console.log("Controller Error: ", err);});  
+            const resultDireccionId = direcionDb.getIdUltimaDireccion();
+            const ID_DIRECCION_IN = await resultDireccionId.catch((err)=>{
+                    console.log("Controller Error: ", err);});          
+            const result = empleadoDb.createEmpleado( NOMBRE_IN,
                 APELLIDO_PATERNO_IN,
                 APELLIDO_MATERNO_IN,
                 DNI_IN,
