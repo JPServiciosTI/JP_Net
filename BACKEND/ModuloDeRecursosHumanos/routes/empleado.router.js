@@ -100,9 +100,27 @@ router.put("/update", async (req, res) => {
     }
   });
 
-  router.get("/direccion/ultimate", async (req, res) => {
+router.get("/direccion/ultimate", async (req, res) => {
     try {
       const info = await direccionController.getUltimaDireccion();
+      res.setHeader("Content-Type", "application/json");
+      if (info.status == null) {
+        res.status(502).end(JSON.stringify(info)).json({
+          status: "ERROR",
+        });
+        return;
+      }
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify(info));
+    } catch (error) {
+      console.log("Ruta Error: ", error);
+      return {status: res.status(501), id:null};
+    }
+  });
+
+  router.get("/cargos", async (req, res) => {
+    try {
+      const info = await empleadoController.getCargos();
       res.setHeader("Content-Type", "application/json");
       if (info.status == null) {
         res.status(502).end(JSON.stringify(info)).json({

@@ -1,8 +1,10 @@
+const CargoModel = require("../models/cargo.model");
 const ContratoModel = require("../models/contratos.model");
 const DireccionModel = require("../models/direccion.model");
 const EmpleadoModel = require("../models/empleado.model");
 const empleadoDb = new EmpleadoModel();
 const direcionDb = new DireccionModel();
+const cargoDb = new CargoModel();
 class EmpleadoController{
     async create(    NOMBRE_IN,
         APELLIDO_PATERNO_IN,
@@ -59,6 +61,20 @@ class EmpleadoController{
         }
     }
      
+
+    async getCargos(){
+        try {
+            const result = cargoDb.get();
+            const data = await result.catch((err)=>{
+                console.log("Controller Error: ", err);
+                return null;
+            });
+            return data;            
+        } catch (error) {
+            console.log("Controller Error: ", err);
+            return null;         
+        }
+    }
 
     async update(    NOMBRE_IN,
         APELLIDO_PATERNO_IN,
