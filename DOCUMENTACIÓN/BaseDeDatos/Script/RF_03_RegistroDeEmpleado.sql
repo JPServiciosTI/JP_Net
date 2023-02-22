@@ -128,3 +128,18 @@ END//
  DELIMITER ;
  
  
+  USE jpnet;
+DELIMITER //
+DROP PROCEDURE IF EXISTS ObtenerIdPorUbigeo;
+CREATE PROCEDURE ObtenerIdPorUbigeo(IN Ubigeo_IN VARCHAR(6))
+BEGIN
+	SELECT idLocalidad FROM jpnet.localidad LO WHERE LO.Ubigeo = Ubigeo_IN;
+END//
+ DELIMITER ;
+ 
+ CALL ObtenerIdPorUbigeo('040101');
+ 
+ 
+ 
+ 
+ 

@@ -137,3 +137,16 @@ BEGIN
     WHERE CAND.idCandidato = IDCandidato_IN; 
 END//
  DELIMITER ;
+ 
+ 
+ 
+USE jpnet;
+DELIMITER //
+DROP PROCEDURE IF EXISTS ObtenerCargos;
+CREATE PROCEDURE ObtenerCargos()
+BEGIN
+	SELECT * FROM jpnet.cargo;
+END//
+ DELIMITER ;
+ 
+call ObtenerCargos()

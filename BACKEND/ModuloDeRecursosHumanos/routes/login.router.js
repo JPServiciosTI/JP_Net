@@ -7,7 +7,7 @@ const loginController = new LoginController;
 router.post("/login", async (req, res) => {
   try {
     console.log(req.body.email, req.body.password)
-    const info = await userController.authenticate(req.body.email, req.body.password);
+    const info = await loginController.authenticate(req.body.email, req.body.password);
     res.setHeader("Content-Type", "application/json");
     if (info.status == null) {
       res.status(502).end(JSON.stringify(info)).json({
@@ -26,7 +26,7 @@ router.post("/login", async (req, res) => {
 
 router.get("/getall", async (req, res) => {
   try {
-    const info = await userController.getAll();
+    const info = await loginController.getAll();
     res.setHeader("Content-Type", "application/json");
     if (info == null) {
       res.status(502).end(JSON.stringify(info)).json({
@@ -47,7 +47,7 @@ router.get("/getall", async (req, res) => {
 router.post("/create", async (req, res) => {
   try {
     console.log(req.body.email,req.body.password);
-    const info = await userController.create(req.body.email,req.body.password,1);
+    const info = await loginController.create(req.body.email,req.body.password,1);
     console.log(info);
     res.setHeader("Content-Type", "application/json");
     if (info == null) {

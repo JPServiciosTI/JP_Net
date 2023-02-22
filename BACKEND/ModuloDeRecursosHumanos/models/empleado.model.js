@@ -46,7 +46,7 @@ class EmpleadoModel {
       return { status: "ok", id: data[0] };
     } catch (error) {
       console.log(error);
-      return { status: "error" };
+      return { status: "error", id: null };
     }
   }
 

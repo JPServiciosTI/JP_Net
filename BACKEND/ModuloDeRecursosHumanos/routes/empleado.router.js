@@ -22,8 +22,8 @@ router.post("/register", async (req, res) => {
         req.body.email,
         req.body.contactodeemergencia,
         req.body.numerodeemergencia,
-        req.body.idLocalidad,
         req.body.ubigeo,
+        req.body.idLocalidadActual,
         req.body.idTipodeVia,
         req.body.nombreDeVia,
         req.body.idTipoDeLocalidad,
@@ -35,7 +35,7 @@ router.post("/register", async (req, res) => {
         req.body.idfondodepension
         );    
     res.setHeader("Content-Type", "application/json");
-    if (info.status == null) {
+    if (info.status == null || info.status == "error") {
       res.status(502).end(JSON.stringify(info)).json({
         status: "ERROR",
       });
