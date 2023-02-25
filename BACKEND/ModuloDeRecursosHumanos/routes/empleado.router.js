@@ -136,4 +136,42 @@ router.get("/direccion/ultimate", async (req, res) => {
     }
   });
 
+
+  router.get("/getforlimit", async (req, res) => {
+    try {
+      const info = await empleadoController.getForLimit(req.body.idEmpleado,10);
+      res.setHeader("Content-Type", "application/json");
+      if (info.status == null || info.status == "error" || info.id == null) {
+        res.status(502).end(JSON.stringify(info)).json({
+          status: "ERROR",
+        });
+        return;
+      }
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify(info));
+    } catch (error) {
+      console.log("Ruta Error: ", error);
+      return {status: res.status(501), id:null};
+    }
+  });
+
+  router.post("/gettareo", async (req, res) => {
+    try {
+      console.log(req.params.idEmpleado,req.params.fechaInicio,req.params.fechaFin)
+      const info = await empleadoController.getTareoPorFecha(req.body.idEmpleado,req.body.fechaInicio,req.body.fechaFin);
+      res.setHeader("Content-Type", "application/json");
+      if (info.status == null || info.status == "error" || info.id == null) {
+        res.status(502).end(JSON.stringify(info)).json({
+          status: "ERROR",
+        });
+        return;
+      }
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify(info));
+    } catch (error) {
+      console.log("Ruta Error: ", error);
+      return {status: res.status(501), id:null};
+    }
+  });
+
   module.exports = router;

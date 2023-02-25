@@ -3,10 +3,12 @@ const ContratoModel = require("../models/contratos.model");
 const DireccionModel = require("../models/direccion.model");
 const EmpleadoModel = require("../models/empleado.model");
 const LocalidadModel = require("../models/localidad.model");
+const TareoModel = require("../models/tareo.model");
 const empleadoDb = new EmpleadoModel();
 const direcionDb = new DireccionModel();
 const cargoDb = new CargoModel();
 const localidadDb = new LocalidadModel();
+const tareoDb = new TareoModel();
 class EmpleadoController{
     async create(    NOMBRE_IN,
         APELLIDO_PATERNO_IN,
@@ -131,7 +133,23 @@ class EmpleadoController{
                 console.log("Controller Error: ", err);
                 return null;
             });
-            return data['id'];
+            return data;
+        } catch (error) {
+            console.log("Controller Error: ", err);
+            return null;
+        }
+    }
+
+    async getTareoPorFecha( ID_EMPLEADO,FechaDeInicio,FechaFin ){
+        console.log("Pasan los Datos",ID_EMPLEADO,FechaDeInicio,FechaFin)
+
+        try {
+                const result = tareoDb.getTareoPorFecha(  FechaDeInicio,FechaFin,ID_EMPLEADO);
+                const data = await result.catch((err)=>{
+                    console.log("Controller Error: ", err);
+                    return null;
+                });
+                return data; 
         } catch (error) {
             console.log("Controller Error: ", err);
             return null;

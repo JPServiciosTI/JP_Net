@@ -15,12 +15,12 @@ router.post("/register", async (req, res) => {
         req.body.telefono,
         req.body.email,
         req.body.salarioTentativo,
-        req.body.cargOptarID,
+        req.body.cargOptar,
         req.body.mesesDeExperiencia,
         req.body.linkCV
         );
     res.setHeader("Content-Type", "application/json");
-    if (info.status == null) {
+    if (info.status == null || info.status == "error" || info.id == null) {
       res.status(502).end(JSON.stringify(info)).json({
         status: "ERROR",
       });
@@ -49,7 +49,7 @@ router.put("/updateProcess", async (req, res) => {
           req.body.etapadecontratacion
           );
       res.setHeader("Content-Type", "application/json");
-      if (info.status == null) {
+      if (info.status == null || info.status == "error") {
         res.status(502).end(JSON.stringify(info)).json({
           status: "ERROR",
         });
