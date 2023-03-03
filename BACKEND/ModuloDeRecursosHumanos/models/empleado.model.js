@@ -1,4 +1,6 @@
 const connectionDb = require("../database/dbconections");
+
+
 class EmpleadoModel {
   async createEmpleado(
     NOMBRE_IN,
@@ -151,5 +153,8 @@ class EmpleadoModel {
       return { status: "error" };
     }
   }
+
+ 
+
 }
 module.exports = EmpleadoModel;

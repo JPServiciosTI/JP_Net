@@ -68,7 +68,6 @@ class EmpleadoController{
             return null;
         }
     }
-     
 
     async getCargos(){
         try {
@@ -156,6 +155,35 @@ class EmpleadoController{
         }
     }
 
+    async registrarTareo( DateIN ,ID_EMPLEADO,HoraIngreso, HoraAlmuerzo, HoraFinDeAlmuerzo, HoraSalida ){
+        console.log(DateIN ,ID_EMPLEADO,HoraIngreso, HoraAlmuerzo, HoraFinDeAlmuerzo, HoraSalida)
+        try {
+                const result = tareoDb.create(  DateIN,HoraIngreso, HoraAlmuerzo, HoraFinDeAlmuerzo, HoraSalida,ID_EMPLEADO,1);
+                const data = await result.catch((err)=>{
+                    console.log("Controller Error: ", err);
+                    return null;
+                });
+                return data; 
+        } catch (error) {
+            console.log("Controller Error: ", err);
+            return null;
+        }
+    }
+
+    async registrarLicenciaDeHaber( ID_EMPLEADO,FechaDeInicio,FechaFin , Link ){
+        console.log(ID_EMPLEADO)
+        try {
+                const result = tareoDb.createLicenciaDeHaber(FechaDeInicio,FechaFin,ID_EMPLEADO, Link);
+                const data = await result.catch((err)=>{
+                    console.log("Controller Error: ", err);
+                    return null;
+                });
+                return data; 
+        } catch (error) {
+            console.log("Controller Error: ", err);
+            return null;
+        }
+    }
 
 }
 module.exports = EmpleadoController;

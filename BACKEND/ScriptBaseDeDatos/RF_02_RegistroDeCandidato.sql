@@ -107,12 +107,25 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerCandidatos;
 CREATE PROCEDURE ObtenerCandidatos(IN REG_INICIO INT, IN CANTIDAD_IN INT)
 BEGIN
-	SELECT * FROM jpnet.candidato CN INNER JOIN jpnet.persona PO on CN.idPersona = PO.idPersona WHERE CN.idCandidato >= REG_INICIO LIMIT CANTIDAD_IN;
+	SELECT CN.idCandidato,PO.DNI,CN.idPersona,PO.Nombres, PO.ApellidoPaterno, PO.ApellidoMaterno, CAR.NombreCargo ,CN.PretencionSalaria,CN.EtapaPrevia,CN.EtapaDeLlamada,CN.EtapaDeEntrevista,CN.EtapaDeContratacion, CN.LinkCurriculum FROM jpnet.candidato CN INNER JOIN jpnet.persona PO on CN.idPersona = PO.idPersona INNER JOIN jpnet.cargo CAR ON CN.idCargoAOptar = CAR.idCargo WHERE CN.idCandidato >= REG_INICIO LIMIT CANTIDAD_IN;
 END//
  DELIMITER ;
  
 
 CALL ObtenerCandidatos(0,5);
+
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS ObtenerCandidato;
+CREATE PROCEDURE ObtenerCandidato(IN idCandidato_IN INT)
+BEGIN
+	SELECT * FROM jpnet.candidato CN INNER JOIN jpnet.persona PO on CN.idPersona = PO.idPersona INNER JOIN jpnet.cargo CAR ON CN.idCargoAOptar = CAR.idCargo WHERE CN.idCandidato = idCandidato_IN ;
+END//
+ DELIMITER ;
+ 
+CALL ObtenerCandidato(4);
+CALL ObtenerCandidatos(0,5);
+
 
 USE jpnet;
 DELIMITER //
@@ -138,6 +151,7 @@ BEGIN
 END//
  DELIMITER ;
  
+ CALL ActualizarCandidato(70345678, 1, 1, 1, 1);
  
  
 USE jpnet;

@@ -1,12 +1,12 @@
 USE jpnet;
 DELIMITER //
 DROP PROCEDURE IF EXISTS AgregarTareadoComun;
-CREATE PROCEDURE AgregarTareadoComun(IN FECHA_IN DATE,IN HoraDeIngreso_IN TIME,IN HoraInicioAlmuerzo_IN TIME,IN HoraFinAlmuerzo_IN TIME,IN HoraSalida_IN TIME, IN idEmpleado_IN INT, IN CondicionDeTareo_IN INT, IN EstacionDeTrabajo_IN INT)
+CREATE PROCEDURE AgregarTareadoComun(IN FECHA_IN DATE,IN HoraDeIngreso_IN TIME,IN HoraInicioAlmuerzo_IN TIME,IN HoraFinAlmuerzo_IN TIME,IN HoraSalida_IN TIME, IN idEmpleado_IN INT, IN EstacionDeTrabajo_IN INT)
 BEGIN
 	DECLARE ID_Contrato INT;
 	SET ID_Contrato = (SELECT idContrato FROM contrato  WHERE idEmpleado = idEmpleado_IN AND idCondicionDeContrato = 1);
-	INSERT INTO tareo(idContrato,Fecha,HoraDeIngreso, HoraDeInicioDeAlmuerzo,HoraDeFinDEAlmuerzo,HoraDeSalida,idCondicionDeTareo,idEstacionDeTrabajo)
-    VALUES(ID_Contrato,FECHA_IN,HoraDeIngreso_IN,HoraInicioAlmuerzo_IN,HoraFinAlmuerzo_IN,HoraSalida_IN,CondicionDeTareo_IN,EstacionDeTrabajo_IN);
+	INSERT INTO tareo(idContrato,Fecha,HoraDeIngreso, HoraDeInicioDeAlmuerzo,HoraDeFinDEAlmuerzo,HoraDeSalida,idEstacionDeTrabajo)
+    VALUES(ID_Contrato,FECHA_IN,HoraDeIngreso_IN,HoraInicioAlmuerzo_IN,HoraFinAlmuerzo_IN,HoraSalida_IN,EstacionDeTrabajo_IN);
 END//
  DELIMITER ;
  

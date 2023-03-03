@@ -36,13 +36,14 @@ router.post("/register", async (req, res) => {
 
 router.put("/updateProcess", async (req, res) => {
     try {
-      console.log(          req.body.dni,
+      console.log(          
+        req.body.idCandidato,
         req.body.etapaprevia,
         req.body.etapadellamada,
         req.body.etapadeentrevista,
         req.body.etapadecontratacion)
       const info = await candidatoController.updateProcesoDeSeleccion(
-          req.body.dni,
+          req.body.idCandidato,
           req.body.etapaprevia,
           req.body.etapadellamada,
           req.body.etapadeentrevista,
@@ -65,8 +66,8 @@ router.put("/updateProcess", async (req, res) => {
 
   router.get("/getForLimit", async (req, res) => {
     try {
-      console.log(req.body.idmin, req.body.cantidad)
-      const info = await candidatoController.getForLimit(req.body.idmin, req.body.cantidad);
+      console.log(req.query.idmin, req.query.cantidad)
+      const info = await candidatoController.getForLimit(req.query.idmin, req.query.cantidad);
       res.setHeader("Content-Type", "application/json");
       if (info.status == null) {
         res.status(502).end(JSON.stringify(info)).json({
