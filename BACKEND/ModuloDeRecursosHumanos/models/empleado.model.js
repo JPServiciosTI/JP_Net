@@ -126,6 +126,20 @@ class EmpleadoModel {
     }
   }
 
+  async getEmpleadoForLimitParaPlanilla(    ID_EMPLEADO_Inicio,Cantidad  ) {
+    try {
+      const con = connectionDb.promise();
+      const data = await con.query(
+        "CALL ObtenerEmpleadosParaPlanilla(?,?)",
+        [ ID_EMPLEADO_Inicio||0,Cantidad||35 ]
+      );
+      return { status: "ok", id: data[0] };
+    } catch (error) {
+      console.log(error);
+      return { status: "error" };
+    }
+  }
+
   async getIdEmpleado(   DNI  ) {
     try {
       const con = connectionDb.promise();

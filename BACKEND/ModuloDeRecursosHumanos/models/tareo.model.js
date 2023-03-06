@@ -13,6 +13,20 @@ class TareoModel
           }      
     }
 
+
+
+    async getTareoPorFechaEnMinutos(FechaDeInicio,FechaFin,idEmpleado){
+      try {
+          const con = connectionDb.promise();
+          const data = await con.query(
+            "CALL VerTareadoHistoricoTrabajadorCalculadoEnMinutos(?,?,?)",[FechaDeInicio,FechaFin,idEmpleado]);
+          return  data[0];
+        } catch (error) {
+          console.log(error);
+          return { status: "error" };
+        }      
+  }
+
     async create(FechaIN,HoraIngreso, HoraAlmuerzo, HoraFinDeAlmuerzo, HoraSalida,idEmpleado,idEstacion){
       try {
           const con = connectionDb.promise();

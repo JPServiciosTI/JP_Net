@@ -119,10 +119,13 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerEmpleados;
 CREATE PROCEDURE ObtenerEmpleados(IN REG_INICIO INT, IN CANTIDAD_IN INT)
 BEGIN
-	SELECT * FROM jpnet.empleado CN INNER JOIN  jpnet.persona PO ON CN.idPersona = PO.idPersona INNER JOIN jpnet.cargo CG ON CG.idCargo = CN.idCargo WHERE CN.idEmpleado >= REG_INICIO LIMIT CANTIDAD_IN;
+	SELECT * FROM jpnet.empleado CN INNER JOIN  jpnet.persona PO ON CN.idPersona = PO.idPersona INNER JOIN jpnet.cargo CG ON CG.idCargo = CN.idCargo INNER JOIN jpnet.contrato CT ON CT.idEmpleado = CN.idEmpleado WHERE CN.idEmpleado >= REG_INICIO AND CT.idCondicionDeContrato = 1 LIMIT CANTIDAD_IN;
 END//
  DELIMITER ;
 SELECT * FROM jpnet.empleado CN INNER JOIN  jpnet.persona PO ON CN.idPersona = PO.idPersona INNER JOIN jpnet.cargo CG ON CG.idCargo = CN.idCargo WHERE CN.idEmpleado >= 0 LIMIT 10;
+
+CALL ObtenerEmpleados(0,10);
+
 
 USE jpnet;
 DELIMITER //
