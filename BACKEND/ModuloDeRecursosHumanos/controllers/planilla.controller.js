@@ -100,8 +100,6 @@ class PlanillaController {
             }
 
           }
-          console.log(datosCalculo);
-          console.log(dataTareo);
           for (let idpago = 0; idpago < datosCalculo.length; idpago++) {
             const result2 = planillaDb.CrearPago(datosCalculo[idpago].idTareo,datosCalculo[idpago].CantidadDePago,datosCalculo[idpago].Periodo);
             const ResupuestaConfirmado = await result2.catch((err) => {

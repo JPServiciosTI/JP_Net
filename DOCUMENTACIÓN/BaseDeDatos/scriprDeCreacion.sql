@@ -1,3 +1,6 @@
+CREATE SCHEMA `jpnet` ;
+USE `jpnet`;
+
 DROP TABLE IF EXISTS `Persona`;
 		
 CREATE TABLE `Persona` (
