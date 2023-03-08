@@ -185,5 +185,35 @@ class EmpleadoController{
         }
     }
 
+    async registrarLicenciaDeHaber( ID_EMPLEADO,FechaDeInicio,FechaFin , Link ){
+        console.log(ID_EMPLEADO)
+        try {
+                const result = tareoDb.createLicenciaDeHaber(FechaDeInicio,FechaFin,ID_EMPLEADO, Link);
+                const data = await result.catch((err)=>{
+                    console.log("Controller Error: ", err);
+                    return null;
+                });
+                return data; 
+        } catch (error) {
+            console.log("Controller Error: ", err);
+            return null;
+        }
+    }
+
+ async registrarHoraExtra( LINK_IN,idEmpleado,FechaIN,Cantidad25,Cantidad35){
+        console.log(idEmpleado)
+        try {
+                const result = tareoDb.createHoraExtra(LINK_IN,idEmpleado,FechaIN,Cantidad25,Cantidad35);
+                const data = await result.catch((err)=>{
+                    console.log("Controller Error: ", err);
+                    return null;
+                });
+                return data; 
+        } catch (error) {
+            console.log("Controller Error: ", err);
+            return null;
+        }
+    }
+
 }
 module.exports = EmpleadoController;

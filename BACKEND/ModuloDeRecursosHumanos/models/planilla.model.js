@@ -61,7 +61,24 @@ class PlanillaModel {
                 DNI,Fecha_Inicio,Fecha_Fin
             ]
           );
-          return { status: "ok", id: data[0][0] };
+          return {id: data[0][0]} ;
+        } catch (error) {
+          console.log(error);
+          return { status: "error" };
+        }
+      }
+
+
+      async ObtenerCantidadDeTardanza(DNI,Fecha_Inicio,Fecha_Fin ) {
+        try {
+          const con = connectionDb.promise();
+          const data = await con.query(
+            "CALL ObtenerTardanzasPorDNI(?,?,?)",
+            [
+                DNI,Fecha_Inicio,Fecha_Fin
+            ]
+          );
+          return {id: data[0][0]} ;
         } catch (error) {
           console.log(error);
           return { status: "error" };
@@ -72,7 +89,7 @@ class PlanillaModel {
         try {
           const con = connectionDb.promise();
           const data = await con.query(
-            "CALL ObtenerPlanillaEmpleados(?,?)",
+            "CALL ObtenerPlanilla(?,?)",
             [
                 Fecha_Inicio,Fecha_Fin
             ]
@@ -83,6 +100,27 @@ class PlanillaModel {
           return { status: "error" };
         }
       }
+
+
+      async CalcularRemuneracionBruta(DNI,Fecha_Inicio,Fecha_Fin ) {
+        try {
+          const con = connectionDb.promise();
+          const data = await con.query(
+            "CALL CalcularRemuneracionBruta(?,?,?)",
+            [
+              DNI,Fecha_Inicio,Fecha_Fin
+            ]
+          );
+          return { status: "ok", id: data[0] };
+        } catch (error) {
+          console.log(error);
+          return { status: "error" };
+        }
+      }
+
+
+
+
 
 }
 

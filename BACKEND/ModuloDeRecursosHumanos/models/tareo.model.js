@@ -52,6 +52,32 @@ class TareoModel
     }  
   }
 
+  async createHoraExtra(LINK_IN,idEmpleado,FechaIN,Cantidad25,Cantidad35){
+    
+    try {
+      const con = connectionDb.promise();
+      const data = await con.query(
+        "CALL RegistrarHorasExtra(?,?,?,?)",[LINK_IN,idEmpleado,FechaIN,Cantidad25,Cantidad35 ]);
+      return { status: "ok", id: data[0]};
+    } catch (error) {
+      console.log(error);
+      return { status: "error" };
+    }  
+  }
+
+  async getHorasExtras(idEmpleado){
+    
+    try {
+      const con = connectionDb.promise();
+      const data = await con.query(
+        "CALL RegistrarHorasExtra(?,?,?,?)",[LINK_IN,idEmpleado,FechaIN,Cantidad25,Cantidad35 ]);
+      return { status: "ok", id: data[0]};
+    } catch (error) {
+      console.log(error);
+      return { status: "error" };
+    }  
+  }
+
     
 }
 module.exports = TareoModel

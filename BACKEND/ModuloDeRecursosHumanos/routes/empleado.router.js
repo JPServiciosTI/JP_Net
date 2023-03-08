@@ -219,13 +219,13 @@ router.post("/register/tareo", async (req, res) => {
 
 router.post("/register/horaextra", async (req, res) => {
   try {
-    let now = new Date();
+
     //	YYYY-MM-DD
-    let fecha = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDay();
-    const info = await empleadoController.registrarLicenciaDeHaber(
+    const info = await empleadoController.registrarHoraExtra(
       req.body.idEmpleado,
-      req.body.horaInicio,
-      req.body.horaFin,
+      req.body.Fecha,
+      req.body.Cantidad25,
+      req.body.Cantidad35,
       req.body.linkDocumento
     );
     res.setHeader("Content-Type", "application/json");

@@ -1,7 +1,7 @@
 USE jpnet;
 DELIMITER //
-DROP PROCEDURE IF EXISTS VerHorasExtras;
-CREATE PROCEDURE VerHorasExtras(IN FECHA_IN DATE, IN FechaFIN DATE, IN idEmpleado_IN INT)
+DROP PROCEDURE IF EXISTS VerTiempoExtra;
+CREATE PROCEDURE VerTiempoExtra(IN FECHA_IN DATE, IN FechaFIN DATE, IN idEmpleado_IN INT)
 BEGIN
 	DECLARE ID_Contrato INT;
     SET ID_Contrato = (SELECT idContrato FROM contrato  WHERE idEmpleado = idEmpleado_IN AND idCondicionDeContrato = 1);
@@ -25,9 +25,11 @@ SELECT idHorasExtras FROM horasextras ORDER BY HoraDeRegistro ASC LIMIT 1;
 USE jpnet;
 DELIMITER //
 DROP PROCEDURE IF EXISTS RegistrarHorasExtra;
-CREATE PROCEDURE RegistrarHorasExtra(IN Link_IN TEXT , IN idTareo_IN INT)
+CREATE PROCEDURE RegistrarHorasExtra(IN Link_IN TEXT , IN idEmpleado_IN INT,IN Day_IN DATE, IN ValorDe25_IN FLOAT, IN ValorDe35_IN FLOAT)
 BEGIN
 	DECLARE ID_HoraExtra INT; 
+	DECLARE ID_Contrato INT; 
+    DECLARE ID_Tareo INT;
     /*Handler para error SQL*/
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
@@ -42,13 +44,19 @@ BEGIN
 	END;
     
 	START TRANSACTION;
-		INSERT INTO jpnet.horasextras(LinkDocumento) VALUES(Link_IN);
-		SET ID_HoraExtra = (SELECT idHorasExtras FROM horasextras ORDER BY HoraDeRegistro ASC LIMIT 1);
-		UPDATE tareo TRA SET idHorasExtras = ID_HoraExtra WHERE idTareo = idTareo_IN;
+		SET ID_Contrato = (SELECT idContrato FROM contrato  WHERE idEmpleado = idEmpleado_IN AND idCondicionDeContrato = 1);
+		SET ID_Tareo = (SELECT TRA.idTareo  FROM tareo TRA WHERE TRA.idContrato = ID_Contrato AND TRA.Fecha =  Day_IN);
+        INSERT INTO jpnet.horasextras(LinkDocumento,ValorDe25,ValorDe35) VALUES(Link_IN,ValorDe25_IN,ValorDe35_IN);
+		SET ID_HoraExtra = (SELECT idHorasExtras FROM horasextras ORDER BY HoraDeRegistro DESC LIMIT 1);
+		UPDATE tareo TRA SET TRA.idHorasExtras = ID_HoraExtra WHERE idTareo = ID_Tareo;
 		COMMIT;
 
 END//
 DELIMITER ;
+
+CALL RegistrarHorasExtra("qertyuio" , 21 ,"2023-01-24",2,2);
+
+
 
 
 USE jpnet;
