@@ -17,6 +17,33 @@ const fs = require("fs/promises");
 const path = require("path");
 
 
+
+const multer = require('multer');
+const mimeTypes = require("mime-types");
+
+
+const storage = multer.diskStorage({
+  destination: 'upload/',
+  filename: function(req,file,cb){
+    cb("",Date.now()+file.originalname+"." + mimeTypes.extension(file.mimetype));
+  }
+  
+})
+
+const upload = multer({
+  storage: storage
+})
+
+router.get("/image", (req,res)=>{
+  console.log(__dirname);
+})
+
+
+router.get("/files",upload.single('image') ,(req,res)=>{
+  res.send('Tudo bem');
+})
+
+
 router.post("/register", async (req, res) => {
   try {
     console.log(req.body.email, req.body.password);
@@ -217,8 +244,16 @@ router.post("/register/tareo", async (req, res) => {
   }
 });
 
-router.post("/register/horaextra", async (req, res) => {
-  try {
+router.get("/register/horaextra",upload.single('image') , async (req, res) => {
+  console.log(
+    req.body.idEmpleado,
+    req.body.Fecha,
+    req.body.Cantidad25,
+    req.body.Cantidad35,
+    req.body.linkDocumento
+  )
+  /*try {
+
 
     //	YYYY-MM-DD
     const info = await empleadoController.registrarHoraExtra(
@@ -240,8 +275,8 @@ router.post("/register/horaextra", async (req, res) => {
   } catch (error) {
     console.log("Ruta Error: ", error);
     return { status: res.status(501), id: null };
-  }
-});
+ } */}
+  );
 
 router.post("/register/licenciacongoce", async (req, res) => {
   try {
