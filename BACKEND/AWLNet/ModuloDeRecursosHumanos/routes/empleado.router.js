@@ -216,7 +216,7 @@ router.post("/gettareo", async (req, res) => {
   }
 });
 
-router.post("/register/tareo", async (req, res) => {
+router.post("/register/tareo/comun", async (req, res) => {
   try {
     let now = new Date();
     //	YYYY-MM-DD
@@ -244,17 +244,31 @@ router.post("/register/tareo", async (req, res) => {
   }
 });
 
-router.get("/register/horaextra",upload.single('image') , async (req, res) => {
-  console.log(
-    req.body.idEmpleado,
-    req.body.Fecha,
-    req.body.Cantidad25,
-    req.body.Cantidad35,
-    req.body.linkDocumento
-  )
-  /*try {
+router.post("/register/tareo/mina", async (req, res) => {
+  try {
+    const info = await empleadoController.registrarTareoMina(
+      req.body.fecha,
+      req.body.idOperacion,
+      req.body.idEmpleado,
+      req.body.idCondicionDeTareo 
+    );
+    res.setHeader("Content-Type", "application/json");
+    if (info.status == null || info.status == "error" || info.id == null) {
+      res.status(502).end(JSON.stringify(info)).json({
+        status: "ERROR",
+      });
+      return;
+    }
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify(info));
+  } catch (error) {
+    console.log("Ruta Error: ", error);
+    return { status: res.status(501), id: null };
+  }
+});
 
-
+router.get("/register/horaextra" , async (req, res) => {
+try {
     //	YYYY-MM-DD
     const info = await empleadoController.registrarHoraExtra(
       req.body.idEmpleado,
@@ -275,12 +289,81 @@ router.get("/register/horaextra",upload.single('image') , async (req, res) => {
   } catch (error) {
     console.log("Ruta Error: ", error);
     return { status: res.status(501), id: null };
- } */}
-  );
+ } }
+);
 
 router.post("/register/licenciacongoce", async (req, res) => {
   try {
     const info = await empleadoController.registrarLicenciaDeHaber(
+      req.body.idEmpleado,
+      req.body.fechaInicio,
+      req.body.fechaFin,
+      req.body.linkDocumento
+    );
+    res.setHeader("Content-Type", "application/json");
+    if (info.status == null || info.status == "error" || info.id == null) {
+      res.status(502).end(JSON.stringify(info)).json({
+        status: "ERROR",
+      });
+      return;
+    }
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify(info));
+  } catch (error) {
+    console.log("Ruta Error: ", error);
+    return { status: res.status(501), id: null };
+  }
+});
+
+router.post("/register/licenciasingoce", async (req, res) => {
+  try {
+    const info = await empleadoController.registrarLicenciaSinDeHaber(
+      req.body.idEmpleado,
+      req.body.fechaInicio,
+      req.body.fechaFin,
+      req.body.linkDocumento
+    );
+    res.setHeader("Content-Type", "application/json");
+    if (info.status == null || info.status == "error" || info.id == null) {
+      res.status(502).end(JSON.stringify(info)).json({
+        status: "ERROR",
+      });
+      return;
+    }
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify(info));
+  } catch (error) {
+    console.log("Ruta Error: ", error);
+    return { status: res.status(501), id: null };
+  }
+});
+
+router.post("/register/descansosmedicos", async (req, res) => {
+  try {
+    const info = await empleadoController.registrarDescansoMedico(
+      req.body.linkDocumento,
+      req.body.idEmpleado,
+      req.body.fechaInicio,
+      req.body.fechaFin
+    );
+    res.setHeader("Content-Type", "application/json");
+    if (info.status == null || info.status == "error" || info.id == null) {
+      res.status(502).end(JSON.stringify(info)).json({
+        status: "ERROR",
+      });
+      return;
+    }
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify(info));
+  } catch (error) {
+    console.log("Ruta Error: ", error);
+    return { status: res.status(501), id: null };
+  }
+});
+
+router.post("/register/vacaciones", async (req, res) => {
+  try {
+    const info = await empleadoController.registrarPeriodoVacacional(
       req.body.idEmpleado,
       req.body.fechaInicio,
       req.body.fechaFin,

@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `awlnet` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `awlnet`;
+CREATE DATABASE  IF NOT EXISTS `jpingenieria_awlnet2023` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `jpingenieria_awlnet2023`;
 -- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
 --
--- Host: localhost    Database: awlnet
+-- Host: localhost    Database: jpingenieria_awlnet2023
 -- ------------------------------------------------------
 -- Server version	8.0.32
 
@@ -1290,11 +1290,11 @@ LOCK TABLES `tipoexamenmedico` WRITE;
 UNLOCK TABLES;
 
 --
--- Dumping events for database 'awlnet'
+-- Dumping events for database 'jpingenieria_awlnet2023'
 --
 
 --
--- Dumping routines for database 'awlnet'
+-- Dumping routines for database 'jpingenieria_awlnet2023'
 --
 /*!50003 DROP PROCEDURE IF EXISTS `ActualizarCandidato` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -1308,7 +1308,7 @@ UNLOCK TABLES;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ActualizarCandidato`(IN IDCandidato_IN INT,IN EtapaPrevia_IN INT,IN EtapaDeLlamada_IN INT,IN EtapaEntrevista_IN INT,IN EtapaDeContratacion_IN INT)
 BEGIN
-	UPDATE awlnet.candidato CAND SET 
+	UPDATE jpingenieria_awlnet2023.candidato CAND SET 
     CAND.EtapaPrevia = EtapaPrevia_IN,
     CAND.EtapaDeLlamada = EtapaDeLlamada_IN,
     CAND.EtapaDeEntrevista = EtapaEntrevista_IN,
@@ -1335,8 +1335,8 @@ IN TELEFONOFIJO_IN VARCHAR(10),IN EMAIL_IN VARCHAR(100),IN CONTACTODEEMERGENCIA_
 IN ID_LOCALIDAD_ACTUAL_IN INT,IN ID_DIRECCION_IN INT,IN FECHA_DE_NACIMIENTO_IN DATE,IN ID_TIPO_DE_SANGRE_IN INT,IN ALERGIAS_IN VARCHAR(100))
 BEGIN
 	DECLARE idPERS INT;
-	SET idPERS = (SELECT PER.idPersona FROM awlnet.persona PER WHERE PER.DNI = DNI_IN);
-	UPDATE awlnet.persona PER SET 
+	SET idPERS = (SELECT PER.idPersona FROM jpingenieria_awlnet2023.persona PER WHERE PER.DNI = DNI_IN);
+	UPDATE jpingenieria_awlnet2023.persona PER SET 
     PER.Nombres = NOMBRE_IN,
     PER.ApellidoPaterno = APELLIDO_PATERNO_IN,
     PER.ApellidoMaterno = APELLIDO_MATERNO_IN,
@@ -1443,8 +1443,8 @@ BEGIN
 	DECLARE IDEmpleado INT;
     DECLARE IDContrato INT;
 	SET IDEmpleado = (SELECT EMP.idEmpleado FROM empleado EMP INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN); 
-	SET IDContrato = (SELECT CT.idContrato FROM awlnet.contrato CT INNER JOIN awlnet.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN AND CT.idCondicionDeContrato =1);
-	SELECT ROUND(SUM(PG.CantidadDePago), 2)AS SueldoBruto, ROUND(SUM(PG.CantidadDePago), 2)*0.09 AS EsSalud FROM awlnet.pagotareo PG INNER JOIN awlnet.tareo TAR ON PG.idTareo = TAR.idTareo WHERE TAR.Fecha >= FINICIO_IN AND FECHAFIN_IN >= TAR.Fecha AND TAR.idContrato = IDContrato;
+	SET IDContrato = (SELECT CT.idContrato FROM jpingenieria_awlnet2023.contrato CT INNER JOIN jpingenieria_awlnet2023.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN AND CT.idCondicionDeContrato =1);
+	SELECT ROUND(SUM(PG.CantidadDePago), 2)AS SueldoBruto, ROUND(SUM(PG.CantidadDePago), 2)*0.09 AS EsSalud FROM jpingenieria_awlnet2023.pagotareo PG INNER JOIN jpingenieria_awlnet2023.tareo TAR ON PG.idTareo = TAR.idTareo WHERE TAR.Fecha >= FINICIO_IN AND FECHAFIN_IN >= TAR.Fecha AND TAR.idContrato = IDContrato;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1531,7 +1531,7 @@ BEGIN
 	START TRANSACTION;
 		SET IDEmpleado = (SELECT EMP.idEmpleado FROM empleado EMP INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN); 
 		INSERT INTO contrato(idCondicionDeContrato,idEmpleado,FechaDeInicioDeContrato,FechaDeFinDeContrato) VALUES (1,IDEmpleado,FINICIO_IN,FECHAFIN_IN);
-		SET IDContrato = (SELECT CT.idContrato FROM awlnet.contrato CT INNER JOIN awlnet.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN AND CT.idCondicionDeContrato =1);
+		SET IDContrato = (SELECT CT.idContrato FROM jpingenieria_awlnet2023.contrato CT INNER JOIN jpingenieria_awlnet2023.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN AND CT.idCondicionDeContrato =1);
 		INSERT INTO datoscontables(SueldoBase,CISPP,NHijos,idContrato) VALUES (SUELDO_BASE_IN,CISPP_IN,NHijos_IN,IDContrato);
 		COMMIT;
 
@@ -1682,7 +1682,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `EliminarCandidato`(IN REG_IN INT)
 BEGIN
-	DELETE FROM awlnet.candidato CN WHERE CN.idCandidato = REG_IN;
+	DELETE FROM jpingenieria_awlnet2023.candidato CN WHERE CN.idCandidato = REG_IN;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1701,7 +1701,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `EliminarEmpleado`(IN REG_IN INT)
 BEGIN
-	DELETE FROM awlnet.empleado CN WHERE CN.idEmpleado = REG_IN;
+	DELETE FROM jpingenieria_awlnet2023.empleado CN WHERE CN.idEmpleado = REG_IN;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1740,7 +1740,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ObtenerCandidato`(IN idCandidato_IN INT)
 BEGIN
-	SELECT * FROM awlnet.candidato CN INNER JOIN awlnet.persona PO on CN.idPersona = PO.idPersona INNER JOIN awlnet.cargo CAR ON CN.idCargoAOptar = CAR.idCargo WHERE CN.idCandidato = idCandidato_IN ;
+	SELECT * FROM jpingenieria_awlnet2023.candidato CN INNER JOIN jpingenieria_awlnet2023.persona PO on CN.idPersona = PO.idPersona INNER JOIN jpingenieria_awlnet2023.cargo CAR ON CN.idCargoAOptar = CAR.idCargo WHERE CN.idCandidato = idCandidato_IN ;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1759,7 +1759,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ObtenerCandidatos`(IN REG_INICIO INT, IN CANTIDAD_IN INT)
 BEGIN
-	SELECT CN.idCandidato,PO.DNI,CN.idPersona,PO.Nombres, PO.ApellidoPaterno, PO.ApellidoMaterno, CAR.NombreCargo ,CN.PretencionSalaria,CN.EtapaPrevia,CN.EtapaDeLlamada,CN.EtapaDeEntrevista,CN.EtapaDeContratacion, CN.LinkCurriculum FROM awlnet.candidato CN INNER JOIN awlnet.persona PO on CN.idPersona = PO.idPersona INNER JOIN awlnet.cargo CAR ON CN.idCargoAOptar = CAR.idCargo WHERE CN.idCandidato >= REG_INICIO LIMIT CANTIDAD_IN;
+	SELECT CN.idCandidato,PO.DNI,CN.idPersona,PO.Nombres, PO.ApellidoPaterno, PO.ApellidoMaterno, CAR.NombreCargo ,CN.PretencionSalaria,CN.EtapaPrevia,CN.EtapaDeLlamada,CN.EtapaDeEntrevista,CN.EtapaDeContratacion, CN.LinkCurriculum FROM jpingenieria_awlnet2023.candidato CN INNER JOIN jpingenieria_awlnet2023.persona PO on CN.idPersona = PO.idPersona INNER JOIN jpingenieria_awlnet2023.cargo CAR ON CN.idCargoAOptar = CAR.idCargo WHERE CN.idCandidato >= REG_INICIO LIMIT CANTIDAD_IN;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1778,7 +1778,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ObtenerCargos`()
 BEGIN
-	SELECT * FROM awlnet.cargo;
+	SELECT * FROM jpingenieria_awlnet2023.cargo;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1797,7 +1797,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ObtenerDatosPeriodo`()
 BEGIN
-	SELECT * FROM awlnet.periodo;
+	SELECT * FROM jpingenieria_awlnet2023.periodo;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1816,7 +1816,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ObtenerDireccion`(IN idDireccion_IN INT)
 BEGIN
-	 SELECT * FROM awlnet.direccion DI INNER JOIN awlnet.tipodelocalidad TLO ON DI.idTipoDeLocalidad=TLO.idTipoDeLocalidad INNER JOIN awlnet.tipodevia TLV ON DI.idTipoDeVia=TLV.idTipoDeVia WHERE DI.idDireccion = idDireccion_IN;
+	 SELECT * FROM jpingenieria_awlnet2023.direccion DI INNER JOIN jpingenieria_awlnet2023.tipodelocalidad TLO ON DI.idTipoDeLocalidad=TLO.idTipoDeLocalidad INNER JOIN jpingenieria_awlnet2023.tipodevia TLV ON DI.idTipoDeVia=TLV.idTipoDeVia WHERE DI.idDireccion = idDireccion_IN;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1835,7 +1835,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ObtenerEmpleado`(IN DNI_IN VARCHAR(10))
 BEGIN
-	SELECT idEmpleado FROM awlnet.empleado CN INNER JOIN  awlnet.persona PO ON CN.idPersona = PO.idPersona WHERE PO.DNI = DNI_IN;
+	SELECT idEmpleado FROM jpingenieria_awlnet2023.empleado CN INNER JOIN  jpingenieria_awlnet2023.persona PO ON CN.idPersona = PO.idPersona WHERE PO.DNI = DNI_IN;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1854,7 +1854,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ObtenerEmpleados`(IN REG_INICIO INT, IN CANTIDAD_IN INT)
 BEGIN
-	SELECT * FROM awlnet.empleado CN INNER JOIN  awlnet.persona PO ON CN.idPersona = PO.idPersona INNER JOIN awlnet.cargo CG ON CG.idCargo = CN.idCargo INNER JOIN awlnet.contrato CT ON CT.idEmpleado = CN.idEmpleado WHERE CN.idEmpleado >= REG_INICIO AND CT.idCondicionDeContrato = 1 LIMIT CANTIDAD_IN;
+	SELECT * FROM jpingenieria_awlnet2023.empleado CN INNER JOIN  jpingenieria_awlnet2023.persona PO ON CN.idPersona = PO.idPersona INNER JOIN jpingenieria_awlnet2023.cargo CG ON CG.idCargo = CN.idCargo INNER JOIN jpingenieria_awlnet2023.contrato CT ON CT.idEmpleado = CN.idEmpleado WHERE CN.idEmpleado >= REG_INICIO AND CT.idCondicionDeContrato = 1 LIMIT CANTIDAD_IN;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1873,7 +1873,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ObtenerEmpleadosParaPlanilla`(IN REG_INICIO INT, IN CANTIDAD_IN INT)
 BEGIN
-	SELECT * FROM awlnet.empleado CN INNER JOIN  awlnet.persona PO ON CN.idPersona = PO.idPersona INNER JOIN awlnet.cargo CG ON CG.idCargo = CN.idCargo   INNER JOIN awlnet.contrato CT ON CT.idEmpleado = CN.idEmpleado INNER JOIN awlnet.datoscontables DC ON DC.idContrato = CT.idContrato WHERE CN.idEmpleado >= REG_INICIO AND CT.idCondicionDeContrato = 1 LIMIT CANTIDAD_IN;
+	SELECT * FROM jpingenieria_awlnet2023.empleado CN INNER JOIN  jpingenieria_awlnet2023.persona PO ON CN.idPersona = PO.idPersona INNER JOIN jpingenieria_awlnet2023.cargo CG ON CG.idCargo = CN.idCargo   INNER JOIN jpingenieria_awlnet2023.contrato CT ON CT.idEmpleado = CN.idEmpleado INNER JOIN jpingenieria_awlnet2023.datoscontables DC ON DC.idContrato = CT.idContrato WHERE CN.idEmpleado >= REG_INICIO AND CT.idCondicionDeContrato = 1 LIMIT CANTIDAD_IN;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1892,7 +1892,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ObtenerIdEmpleado`(IN DNI_IN VARCHAR(10))
 BEGIN
-	SELECT * FROM awlnet.empleado CN INNER JOIN  awlnet.persona PO ON CN.idPersona = PO.idPersona WHERE PO.DNI = DNI_IN;
+	SELECT * FROM jpingenieria_awlnet2023.empleado CN INNER JOIN  jpingenieria_awlnet2023.persona PO ON CN.idPersona = PO.idPersona WHERE PO.DNI = DNI_IN;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1911,7 +1911,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ObtenerIdPorUbigeo`(IN Ubigeo_IN VARCHAR(6))
 BEGIN
-	SELECT idLocalidad FROM awlnet.localidad LO WHERE LO.Ubigeo = Ubigeo_IN;
+	SELECT idLocalidad FROM jpingenieria_awlnet2023.localidad LO WHERE LO.Ubigeo = Ubigeo_IN;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1968,7 +1968,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ObtenerPlanilla`( IN FINICIO_IN DATE,IN FECHAFIN_IN DATE )
 BEGIN
-	SELECT CT.idContrato ,CT.FechaDeInicioDeContrato,CT.FechaDeFinDeContrato,CT.idEmpleado,PRS.Nombres,PRS.ApellidoPaterno,PRS.ApellidoMaterno,DCT.SueldoBase,PRS.DNI,DCT.NHijos,DCT.SueldoBase,DCT.idDatosContables,DCT.NHijos, FDP.NombreEntidad,FDP.PorcentajeDeDescuento  FROM awlnet.contrato CT INNER JOIN awlnet.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN datoscontables DCT ON CT.idContrato = DCT.idContrato INNER JOIN fondodepension FDP ON EMP.idFondoDePension = FDP.idFondoDePension INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona  WHERE CT.FechaDeInicioDeContrato >= FINICIO_IN AND FECHAFIN_IN <= CT.FechaDeFinDeContrato AND CT.idCondicionDeContrato =1;
+	SELECT CT.idContrato ,CT.FechaDeInicioDeContrato,CT.FechaDeFinDeContrato,CT.idEmpleado,PRS.Nombres,PRS.ApellidoPaterno,PRS.ApellidoMaterno,DCT.SueldoBase,PRS.DNI,DCT.NHijos,DCT.SueldoBase,DCT.idDatosContables,DCT.NHijos, FDP.NombreEntidad,FDP.PorcentajeDeDescuento  FROM jpingenieria_awlnet2023.contrato CT INNER JOIN jpingenieria_awlnet2023.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN datoscontables DCT ON CT.idContrato = DCT.idContrato INNER JOIN fondodepension FDP ON EMP.idFondoDePension = FDP.idFondoDePension INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona  WHERE CT.FechaDeInicioDeContrato >= FINICIO_IN AND FECHAFIN_IN <= CT.FechaDeFinDeContrato AND CT.idCondicionDeContrato =1;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1987,7 +1987,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ObtenerPlanillaEmpleados`( IN FINICIO_IN DATE,IN FECHAFIN_IN DATE )
 BEGIN
-	SELECT CT.idContrato,CT.FechaDeInicioDeContrato,CT.FechaDeFinDeContrato,CT.idEmpleado,PRS.Nombres,PRS.ApellidoPaterno,PRS.ApellidoMaterno,PRS.DNI FROM awlnet.contrato CT INNER JOIN awlnet.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE CT.FechaDeInicioDeContrato >= FINICIO_IN AND FECHAFIN_IN <= CT.FechaDeFinDeContrato AND CT.idCondicionDeContrato =1;
+	SELECT CT.idContrato,CT.FechaDeInicioDeContrato,CT.FechaDeFinDeContrato,CT.idEmpleado,PRS.Nombres,PRS.ApellidoPaterno,PRS.ApellidoMaterno,PRS.DNI FROM jpingenieria_awlnet2023.contrato CT INNER JOIN jpingenieria_awlnet2023.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE CT.FechaDeInicioDeContrato >= FINICIO_IN AND FECHAFIN_IN <= CT.FechaDeFinDeContrato AND CT.idCondicionDeContrato =1;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2009,7 +2009,7 @@ BEGIN
 	DECLARE IDEmpleado INT;
     DECLARE IDContrato INT;
 	SET IDEmpleado = (SELECT EMP.idEmpleado FROM empleado EMP INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN); 
-	SET IDContrato = (SELECT CT.idContrato FROM awlnet.contrato CT INNER JOIN awlnet.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN AND CT.idCondicionDeContrato =1);
+	SET IDContrato = (SELECT CT.idContrato FROM jpingenieria_awlnet2023.contrato CT INNER JOIN jpingenieria_awlnet2023.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN AND CT.idCondicionDeContrato =1);
 	SELECT COUNT(TR.idTareo) AS Faltas  FROM tareo TR WHERE TR.idCondicionDeTareo = 3 AND TR.idContrato = IDContrato;
 END ;;
 DELIMITER ;
@@ -2032,8 +2032,8 @@ BEGIN
 	DECLARE IDEmpleado INT;
     DECLARE IDContrato INT;
 	SET IDEmpleado = (SELECT EMP.idEmpleado FROM empleado EMP INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN); 
-	SET IDContrato = (SELECT CT.idContrato FROM awlnet.contrato CT INNER JOIN awlnet.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN AND CT.idCondicionDeContrato =1);
-	SELECT *  FROM awlnet.pagotareo PG INNER JOIN awlnet.tareo TAR ON PG.idTareo = TAR.idTareo WHERE TAR.Fecha >= FINICIO_IN AND FECHAFIN_IN >= TAR.Fecha AND TAR.idContrato = IDContrato;
+	SET IDContrato = (SELECT CT.idContrato FROM jpingenieria_awlnet2023.contrato CT INNER JOIN jpingenieria_awlnet2023.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN AND CT.idCondicionDeContrato =1);
+	SELECT *  FROM jpingenieria_awlnet2023.pagotareo PG INNER JOIN jpingenieria_awlnet2023.tareo TAR ON PG.idTareo = TAR.idTareo WHERE TAR.Fecha >= FINICIO_IN AND FECHAFIN_IN >= TAR.Fecha AND TAR.idContrato = IDContrato;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2052,7 +2052,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ObtenerUltimaDireccion`()
 BEGIN
-	SELECT * FROM awlnet.direccion DI INNER JOIN awlnet.tipodelocalidad TLO ON DI.idTipoDeLocalidad=TLO.idTipoDeLocalidad INNER JOIN awlnet.tipodevia TLV ON DI.idTipoDeVia=TLV.idTipoDeVia  ORDER BY idDireccion DESC LIMIT 1 ;
+	SELECT * FROM jpingenieria_awlnet2023.direccion DI INNER JOIN jpingenieria_awlnet2023.tipodelocalidad TLO ON DI.idTipoDeLocalidad=TLO.idTipoDeLocalidad INNER JOIN jpingenieria_awlnet2023.tipodevia TLV ON DI.idTipoDeVia=TLV.idTipoDeVia  ORDER BY idDireccion DESC LIMIT 1 ;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2090,7 +2090,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ObtenerUsuarios`()
 BEGIN
-	SELECT * FROM awlnet.login;
+	SELECT * FROM jpingenieria_awlnet2023.login;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2124,7 +2124,7 @@ BEGIN
 	END;
     
 	START TRANSACTION;
-		INSERT INTO awlnet.bonos(PagoHorasExtras,Reintegro, BonoDeclarado, BonoProduce, BonoConductor, BonoRotacion, BonoAsignacionFamiliar) VALUES (PagoHorasExtras_IN,Reintegro_IN,BonoDeclarado_IN,BonoProduce_IN,BonoNoche_IN,BonoRotacion,BonoAsignacionFamiliar);
+		INSERT INTO jpingenieria_awlnet2023.bonos(PagoHorasExtras,Reintegro, BonoDeclarado, BonoProduce, BonoConductor, BonoRotacion, BonoAsignacionFamiliar) VALUES (PagoHorasExtras_IN,Reintegro_IN,BonoDeclarado_IN,BonoProduce_IN,BonoNoche_IN,BonoRotacion,BonoAsignacionFamiliar);
         COMMIT;
 
 END ;;
@@ -2164,7 +2164,7 @@ BEGIN
 	START TRANSACTION;
 		SET ID_Contrato = (SELECT idContrato FROM contrato  WHERE idEmpleado = idEmpleado_IN AND idCondicionDeContrato = 1);
 		SET ID_Tareo = (SELECT TRA.idTareo  FROM tareo TRA WHERE TRA.idContrato = ID_Contrato AND TRA.Fecha =  Day_IN);
-        INSERT INTO awlnet.horasextras(LinkDocumento,ValorDe25,ValorDe35) VALUES(Link_IN,ValorDe25_IN,ValorDe35_IN);
+        INSERT INTO jpingenieria_awlnet2023.horasextras(LinkDocumento,ValorDe25,ValorDe35) VALUES(Link_IN,ValorDe25_IN,ValorDe35_IN);
 		SET ID_HoraExtra = (SELECT idHorasExtras FROM horasextras ORDER BY HoraDeRegistro DESC LIMIT 1);
 		UPDATE tareo TRA SET TRA.idHorasExtras = ID_HoraExtra WHERE idTareo = ID_Tareo;
 		COMMIT;
@@ -2208,7 +2208,7 @@ BEGIN
     
 	START TRANSACTION;
 		SET ID_Contrato = (SELECT idContrato FROM contrato  WHERE idEmpleado = idEmpleado_IN AND idCondicionDeContrato = 1);
-		INSERT INTO awlnet.licenciasingocedehaber(FechaDeInicioConGoceDeHaber,
+		INSERT INTO jpingenieria_awlnet2023.licenciasingocedehaber(FechaDeInicioConGoceDeHaber,
         FechasDeFinConGoceDeHaber,
         LinkDelDocumento
         ) 
@@ -2257,7 +2257,7 @@ BEGIN
     
 	START TRANSACTION;
 		SET ID_Contrato = (SELECT idContrato FROM contrato  WHERE idEmpleado = idEmpleado_IN AND idCondicionDeContrato = 1);
-		INSERT INTO awlnet.licenciasingocedehaber(FechaDeInicioSinGoceDeHaber,
+		INSERT INTO jpingenieria_awlnet2023.licenciasingocedehaber(FechaDeInicioSinGoceDeHaber,
         FechasDeFinSinGoceDeHaber,
         DiasHabilesAConsiderar,
         LinkDelDocumento

@@ -7,7 +7,7 @@ BEGIN
 END//
  DELIMITER ;
  
-
+CALL ObtenerPlanilla();
 
 USE jpingenieria_awlnet2023;
 DELIMITER //
@@ -90,21 +90,17 @@ DELIMITER ;
 CALL ObtenerTareos("74958535",'2023-01-16','2023-02-15');
 
 
-USE jpingenieria_awlnet2023;
-DELIMITER //
-DROP PROCEDURE IF EXISTS ObtenerPlanillaEmpleados//
-CREATE PROCEDURE ObtenerPlanillaEmpleados( IN FINICIO_IN DATE,IN FECHAFIN_IN DATE )
-BEGIN
-	SELECT CT.idContrato,CT.FechaDeInicioDeContrato,CT.FechaDeFinDeContrato,CT.idEmpleado,PRS.Nombres,PRS.ApellidoPaterno,PRS.ApellidoMaterno,PRS.DNI FROM jpingenieria_awlnet2023.contrato CT INNER JOIN jpingenieria_awlnet2023.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE CT.FechaDeInicioDeContrato >= FINICIO_IN AND FECHAFIN_IN <= CT.FechaDeFinDeContrato AND CT.idCondicionDeContrato =1;
-END//
-DELIMITER ;
-CALL ObtenerPlanillaEmpleados('2023-01-16','2023-02-15');
+#USE jpingenieria_awlnet2023;
+#DELIMITER //
+#DROP PROCEDURE IF EXISTS ObtenerPlanillaEmpleados//
+#CREATE PROCEDURE ObtenerPlanillaEmpleados( IN FINICIO_IN DATE,IN FECHAFIN_IN DATE )
+#BEGIN
+#	SELECT CT.idContrato,CT.FechaDeInicioDeContrato,CT.FechaDeFinDeContrato,CT.idEmpleado,PRS.Nombres,PRS.ApellidoPaterno,PRS.ApellidoMaterno,PRS.DNI FROM jpingenieria_awlnet2023.contrato CT INNER JOIN jpingenieria_awlnet2023.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE CT.FechaDeInicioDeContrato >= FINICIO_IN AND FECHAFIN_IN <= CT.FechaDeFinDeContrato AND CT.idCondicionDeContrato =1;
+#END//
+#DELIMITER ;
+#CALL ObtenerPlanillaEmpleados('2023-01-16','2023-02-15');
 
-SELECT * FROM jpingenieria_awlnet2023.contrato CT INNER JOIN jpingenieria_awlnet2023.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE CT.FechaDeInicioDeContrato >= FINICIO_IN AND FECHAFIN_IN >= CT.FechaDeFinDeContrato AND CT.idCondicionDeContrato =1;
-SET IDDatosContables = (SELECT DC.idDatosContables FROM jpingenieria_awlnet2023.datoscontables DC WHERE DC.idContrato = IDContrato);
-
-
-       
+      
 USE jpingenieria_awlnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerPlanilla//
@@ -128,3 +124,7 @@ BEGIN
 END//
 DELIMITER ;
 CALL ObtenerTardanzasPorDNI("71234180",'2023-01-16','2023-02-15');
+
+
+
+

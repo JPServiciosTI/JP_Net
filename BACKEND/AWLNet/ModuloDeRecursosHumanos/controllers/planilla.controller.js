@@ -117,25 +117,6 @@ class PlanillaController {
 
 
 
-
-
-
-
-  async CalcularPagoEsSalud(){
-    try {
-        const result1 = empleadoDb.getEmpleadoForLimitParaPlanilla(0, 100);
-        const dataEmpleados = await result1.catch((err) => {
-          console.log("Controller Error: ", err);
-          return { status: "error Empleados", id: null };
-        });
-        console.log(dataEmpleados.id[0]);
-    
-    } catch (error) {
-        
-    }
-  }
-
-
   async obtenerPeriodos() {
     try {
       const result = planillaDb.getDatosPeriodo();

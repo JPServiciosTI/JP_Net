@@ -13,8 +13,6 @@ class TareoModel
           }      
     }
 
-
-
     async getTareoPorFechaEnMinutos(FechaDeInicio,FechaFin,idEmpleado){
       try {
           const con = connectionDb.promise();
@@ -27,7 +25,7 @@ class TareoModel
         }      
   }
 
-    async create(FechaIN,HoraIngreso, HoraAlmuerzo, HoraFinDeAlmuerzo, HoraSalida,idEmpleado,idEstacion){
+    async createComun(FechaIN,HoraIngreso, HoraAlmuerzo, HoraFinDeAlmuerzo, HoraSalida,idEmpleado,idEstacion){
       try {
           const con = connectionDb.promise();
           const data = await con.query(
@@ -39,7 +37,66 @@ class TareoModel
         }      
   }
 
-  async createLicenciaDeHaber(FechaIN,FechaFin, idEmpleado, LINK){
+  async createTareoMina(FechaIN,idOperacion,idEmpleado,idCondicionDeTareo){
+    try {
+        const con = connectionDb.promise();
+        const data = await con.query(
+          "CALL AgregarTareadoMina(?,?,?,?)",[FechaIN,idOperacion,idEmpleado,idCondicionDeTareo]);
+        return { status: "ok", id: data[0]};
+      } catch (error) {
+        console.log(error);
+        return { status: "error" };
+      }      
+}
+
+ /**
+  * LICENCIAS SIN GOCES DE HABER
+  * @param {*} FechaIN 
+  * @param {*} FechaFin 
+  * @param {*} idEmpleado 
+  * @param {*} LINK 
+  * @returns 
+  */
+
+async createLicenciaSinDeHaber(FechaIN,FechaFin, idEmpleado, LINK){
+    
+  try {
+    const con = connectionDb.promise();
+    const data = await con.query(
+      "CALL RegistrarLicenciasSinGoceDeHaber(?,?,?,?)",[FechaIN,FechaFin, LINK, idEmpleado]);
+    return { status: "ok", id: data[0]};
+  } catch (error) {
+    console.log(error);
+    return { status: "error" };
+  }  
+}
+
+async getLicenciaSinDeHaber(DNI,fechaInicio,FechaFin){
+  
+  try {
+    const con = connectionDb.promise();
+    const data = await con.query(
+      "CALL ObtenerLicenciasSinGocePorDNI(?,?,?)",[DNI,fechaInicio,FechaFin ]);
+    return { status: "ok", id: data[0]};
+  } catch (error) {
+    console.log(error);
+    return { status: "error" };
+  }  
+}
+
+
+
+
+ /**
+  * LICENCIAS CON GOCES DE HABER
+  * @param {*} FechaIN 
+  * @param {*} FechaFin 
+  * @param {*} idEmpleado 
+  * @param {*} LINK 
+  * @returns 
+  */
+
+  async createLicenciaConDeHaber(FechaIN,FechaFin, idEmpleado, LINK){
     
     try {
       const con = connectionDb.promise();
@@ -52,6 +109,28 @@ class TareoModel
     }  
   }
 
+  async getLicenciaConDeHaber(DNI,fechaInicio,FechaFin){
+    
+    try {
+      const con = connectionDb.promise();
+      const data = await con.query(
+        "CALL ObtenerLicenciasConGocePorDNI(?,?,?)",[DNI,fechaInicio,FechaFin ]);
+      return { status: "ok", id: data[0]};
+    } catch (error) {
+      console.log(error);
+      return { status: "error" };
+    }  
+  }
+
+  /**
+   * HORAS EXTRAS
+   * @param {*} LINK_IN 
+   * @param {*} idEmpleado 
+   * @param {*} FechaIN 
+   * @param {*} Cantidad25 
+   * @param {*} Cantidad35 
+   * @returns 
+   */
   async createHoraExtra(LINK_IN,idEmpleado,FechaIN,Cantidad25,Cantidad35){
     
     try {
@@ -77,6 +156,74 @@ class TareoModel
       return { status: "error" };
     }  
   }
+
+/**
+ * DESCANSO MEDICO
+ * @param {*} LINK_IN 
+ * @param {*} idEmpleado 
+ * @param {*} fechaInicio 
+ * @param {*} FechaFin 
+ * @returns 
+ */
+  async createDescansoMedicosConIdEmpleado(LINK_IN,idEmpleado,fechaInicio,FechaFin){
+   try {
+      const con = connectionDb.promise();
+      const data = await con.query(
+        "CALL RegistrarDescansoMedico(?,?,?,?)",[LINK_IN,idEmpleado,fechaInicio,FechaFin ]);
+      return { status: "ok", id: data[0]};
+    } catch (error) {
+      console.log(error);
+      return { status: "error" };
+    }  
+  }
+
+  async getDescansoMedicosPorDNI(DNI,FechaDeInicio,FechaFin){
+    
+    try {
+      const con = connectionDb.promise();
+      const data = await con.query(
+        "CALL ObtenerDescansosMedicosPorDNI(?,?,?)",[DNI,FechaDeInicio,FechaFin]);
+      return { status: "ok", id: data[0]};
+    } catch (error) {
+      console.log(error);
+      return { status: "error" };
+    }  
+  }
+
+
+  /**
+ * REGISTRAR VACACIONES
+ * @param {*} LINK_IN 
+ * @param {*} idEmpleado 
+ * @param {*} fechaInicio 
+ * @param {*} FechaFin 
+ * @returns 
+ */
+  async createRegistrarVacaciones(fechaInicio,FechaFin,LINK_IN,idEmpleado){
+    try {
+       const con = connectionDb.promise();
+       const data = await con.query(
+         "CALL RegistrarVacaciones(?,?,?,?)",[fechaInicio,FechaFin,LINK_IN,idEmpleado ]);
+       return { status: "ok", id: data[0]};
+     } catch (error) {
+       console.log(error);
+       return { status: "error" };
+     }  
+   }
+ 
+   async getVacacionesPorDNI(DNI,FechaDeInicio,FechaFin){
+     
+     try {
+       const con = connectionDb.promise();
+       const data = await con.query(
+         "CALL ObtenerVacaciones(?,?,?)",[DNI,FechaDeInicio,FechaFin]);
+       return { status: "ok", id: data[0]};
+     } catch (error) {
+       console.log(error);
+       return { status: "error" };
+     }  
+   }
+
 
     
 }
