@@ -16,7 +16,7 @@ class LoginModel {
     try {
       const con = connectionDb.promise();
       const data = await con.query("CALL ObtenerUsuario(?)", [email] );
-      console.log(data[0][0][0])
+      console.log("AQUIIII",data)
         if (tools.compareHash(password_In, data[0][0][0].password)) {
           
           return { status: "ok", id: data[0][0][0].PersonaId };

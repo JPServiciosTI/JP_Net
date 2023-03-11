@@ -155,10 +155,10 @@ class EmpleadoController{
         }
     }
 
-    async registrarTareoComun( DateIN ,ID_EMPLEADO,HoraIngreso, HoraAlmuerzo, HoraFinDeAlmuerzo, HoraSalida ){
+    async registrarTareoComun( DateIN ,ID_EMPLEADO,HoraIngreso, HoraAlmuerzo, HoraFinDeAlmuerzo, HoraSalida,IdEstacionDeTrabajo ){
         console.log(DateIN ,ID_EMPLEADO,HoraIngreso, HoraAlmuerzo, HoraFinDeAlmuerzo, HoraSalida)
         try {
-                const result = tareoDb.createComun(  DateIN,HoraIngreso, HoraAlmuerzo, HoraFinDeAlmuerzo, HoraSalida,ID_EMPLEADO,1);
+                const result = tareoDb.createComun(  DateIN,HoraIngreso, HoraAlmuerzo, HoraFinDeAlmuerzo, HoraSalida,ID_EMPLEADO,IdEstacionDeTrabajo);
                 const data = await result.catch((err)=>{
                     console.log("Controller Error: ", err);
                     return null;
@@ -187,14 +187,14 @@ class EmpleadoController{
     async registrarLicenciaConDeHaber( ID_EMPLEADO,FechaDeInicio,FechaFin , Link ){
         console.log(ID_EMPLEADO)
         try {
-                const result = tareoDb.createLicenciaDeHaber(FechaDeInicio,FechaFin,ID_EMPLEADO, Link);
+                const result = tareoDb.createLicenciaConDeHaber(FechaDeInicio,FechaFin,ID_EMPLEADO, Link);
                 const data = await result.catch((err)=>{
                     console.log("Controller Error: ", err);
                     return null;
                 });
                 return data; 
         } catch (error) {
-            console.log("Controller Error: ", err);
+            console.log("Controller Error: ", error);
             return null;
         }
     }

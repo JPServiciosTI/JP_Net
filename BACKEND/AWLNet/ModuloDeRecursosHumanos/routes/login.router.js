@@ -6,7 +6,7 @@ const loginController = new LoginController;
 
 router.post("/login", async (req, res) => {
   try {
-    console.log(req.body.email, req.body.password)
+    console.log("AQEUSF",req.body.email, req.body.password)
     const info = await loginController.authenticate(req.body.email, req.body.password);
     res.setHeader("Content-Type", "application/json");
     if (info.status == null) {

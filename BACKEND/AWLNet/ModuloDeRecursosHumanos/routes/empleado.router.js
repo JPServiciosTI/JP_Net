@@ -217,17 +217,22 @@ router.post("/gettareo", async (req, res) => {
 });
 
 router.post("/register/tareo/comun", async (req, res) => {
+  console.log("AQUI",      req.body.fecha,
+  req.body.idEmpleado,
+  req.body.horaIngreso,
+  req.body.horaInicioAlmuerzo,
+  req.body.horaFinAlmuerzo,
+  req.body.horaSalida,
+  req.body.idEstacionDeTrabajo)
   try {
-    let now = new Date();
-    //	YYYY-MM-DD
-    let fecha = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDay();
-    const info = await empleadoController.registrarTareo(
-      fecha,
+    const info = await empleadoController.registrarTareoComun(
+      req.body.fecha,
       req.body.idEmpleado,
       req.body.horaIngreso,
       req.body.horaInicioAlmuerzo,
       req.body.horaFinAlmuerzo,
-      req.body.horaSalida
+      req.body.horaSalida,
+      req.body.idEstacionDeTrabajo
     );
     res.setHeader("Content-Type", "application/json");
     if (info.status == null || info.status == "error" || info.id == null) {
@@ -250,7 +255,7 @@ router.post("/register/tareo/mina", async (req, res) => {
       req.body.fecha,
       req.body.idOperacion,
       req.body.idEmpleado,
-      req.body.idCondicionDeTareo 
+      1
     );
     res.setHeader("Content-Type", "application/json");
     if (info.status == null || info.status == "error" || info.id == null) {
@@ -294,7 +299,7 @@ try {
 
 router.post("/register/licenciacongoce", async (req, res) => {
   try {
-    const info = await empleadoController.registrarLicenciaDeHaber(
+    const info = await empleadoController.registrarLicenciaConDeHaber(
       req.body.idEmpleado,
       req.body.fechaInicio,
       req.body.fechaFin,
@@ -317,6 +322,12 @@ router.post("/register/licenciacongoce", async (req, res) => {
 
 router.post("/register/licenciasingoce", async (req, res) => {
   try {
+    console.log(
+      req.body.idEmpleado,
+      req.body.fechaInicio,
+      req.body.fechaFin,
+      req.body.linkDocumento
+    );
     const info = await empleadoController.registrarLicenciaSinDeHaber(
       req.body.idEmpleado,
       req.body.fechaInicio,
@@ -383,5 +394,52 @@ router.post("/register/vacaciones", async (req, res) => {
     return { status: res.status(501), id: null };
   }
 });
+
+router.post("/register/tareo/feriadotrabajado", async (req, res) => {
+  try {
+    const info = await empleadoController.registrarTareoMina(
+      req.body.fecha,
+      1,
+      req.body.idEmpleado,
+      8
+    );
+    res.setHeader("Content-Type", "application/json");
+    if (info.status == null || info.status == "error" || info.id == null) {
+      res.status(502).end(JSON.stringify(info)).json({
+        status: "ERROR",
+      });
+      return;
+    }
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify(info));
+  } catch (error) {
+    console.log("Ruta Error: ", error);
+    return { status: res.status(501), id: null };
+  }
+});
+
+router.post("/register/tareo/descansotrabajado", async (req, res) => {
+  try {
+    const info = await empleadoController.registrarTareoMina(
+      req.body.fecha,
+      1,
+      req.body.idEmpleado,
+      7
+    );
+    res.setHeader("Content-Type", "application/json");
+    if (info.status == null || info.status == "error" || info.id == null) {
+      res.status(502).end(JSON.stringify(info)).json({
+        status: "ERROR",
+      });
+      return;
+    }
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify(info));
+  } catch (error) {
+    console.log("Ruta Error: ", error);
+    return { status: res.status(501), id: null };
+  }
+});
+
 
 module.exports = router;

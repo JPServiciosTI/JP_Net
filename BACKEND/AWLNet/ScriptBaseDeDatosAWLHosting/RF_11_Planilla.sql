@@ -1,16 +1,5 @@
 USE jpingenieria_awlnet2023;
 DELIMITER //
-DROP PROCEDURE IF EXISTS ObtenerPlanilla//
-CREATE PROCEDURE ObtenerPlanilla(IN REG_INICIO INT, IN CANTIDAD_IN INT)
-BEGIN
-	SELECT * FROM jpingenieria_awlnet2023.empleado CN INNER JOIN  jpingenieria_awlnet2023.persona PO ON CN.idPersona = PO.idPersona  INNER JOIN jpingenieria_awlnet2023.contrato CT ON CT.idEmpleado = CN.idEmpleado WHERE CN.idEmpleado >= REG_INICIO AND CT.idCondicionDeContrato = 1 LIMIT CANTIDAD_IN;
-END//
- DELIMITER ;
- 
-CALL ObtenerPlanilla();
-
-USE jpingenieria_awlnet2023;
-DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerDatosPeriodo//
 CREATE PROCEDURE ObtenerDatosPeriodo()
 BEGIN

@@ -44,6 +44,7 @@ class LoginController {
     }
 
     async authenticate(email,password){
+        console.log(email,password);
         try {
             const result = loginDb.authenticate(email,password);
             const data = await result.catch((err)=>{
