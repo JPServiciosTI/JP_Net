@@ -1,0 +1,904 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- SQL XML created by WWW SQL Designer, https://github.com/ondras/wwwsqldesigner/ -->
+<!-- Active URL: https://ondras.zarovi.cz/sql/demo/ -->
+<sql>
+<datatypes db="mysql">
+	<group label="Numeric" color="rgb(238,238,170)">
+		<type label="Integer" length="0" sql="INTEGER" quote=""/>
+	 	<type label="TINYINT" length="0" sql="TINYINT" quote=""/>
+	 	<type label="SMALLINT" length="0" sql="SMALLINT" quote=""/>
+	 	<type label="MEDIUMINT" length="0" sql="MEDIUMINT" quote=""/>
+	 	<type label="INT" length="0" sql="INT" quote=""/>
+		<type label="BIGINT" length="0" sql="BIGINT" quote=""/>
+		<type label="Decimal" length="1" sql="DECIMAL" re="DEC" quote=""/>
+		<type label="Single precision" length="0" sql="FLOAT" quote=""/>
+		<type label="Double precision" length="0" sql="DOUBLE" re="DOUBLE" quote=""/>
+	</group>
+
+	<group label="Character" color="rgb(255,200,200)">
+		<type label="Char" length="1" sql="CHAR" quote="'"/>
+		<type label="Varchar" length="1" sql="VARCHAR" quote="'"/>
+		<type label="Text" length="0" sql="MEDIUMTEXT" re="TEXT" quote="'"/>
+		<type label="Binary" length="1" sql="BINARY" quote="'"/>
+		<type label="Varbinary" length="1" sql="VARBINARY" quote="'"/>
+		<type label="BLOB" length="0" sql="BLOB" re="BLOB" quote="'"/>
+	</group>
+
+	<group label="Date &amp; Time" color="rgb(200,255,200)">
+		<type label="Date" length="0" sql="DATE" quote="'"/>
+		<type label="Time" length="0" sql="TIME" quote="'"/>
+		<type label="Datetime" length="0" sql="DATETIME" quote="'"/>
+		<type label="Year" length="0" sql="YEAR" quote=""/>
+		<type label="Timestamp" length="0" sql="TIMESTAMP" quote="'"/>
+	</group>
+	
+	<group label="Miscellaneous" color="rgb(200,200,255)">
+		<type label="ENUM" length="1" sql="ENUM" quote=""/>
+		<type label="SET" length="1" sql="SET" quote=""/>
+		<type label="Bit" length="0" sql="bit" quote=""/>
+	</group>
+</datatypes><table x="390" y="440" name="Persona">
+<row name="idPersona" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="Nombres" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="ApellidoPaterno" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="ApellidoMaterno" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="DNI" null="1" autoincrement="0">
+<datatype>VARCHAR(8)</datatype>
+<default>NULL</default></row>
+<row name="Telefono" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="TelefonoFijo" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="Email" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="ContactoDeEmergencia" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="Numero de Emergencia" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="idLocalidadDeNacimiento" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Localidad" row="idLocalidad" />
+</row>
+<row name="idLocalidadActual" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Localidad" row="idLocalidad" />
+</row>
+<row name="idDireccion" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Direccion" row="idDireccion" />
+</row>
+<row name="FechaDeNacimiento" null="1" autoincrement="0">
+<datatype>DATE</datatype>
+<default>NULL</default></row>
+<row name="idTipoDeSangre" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="TipoDeSangre" row="idTipoDeSangre" />
+</row>
+<row name="Alergias" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idPersona</part>
+</key>
+</table>
+<table x="404" y="1084" name="Cargo">
+<row name="idCargo" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreCargo" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idCargo</part>
+</key>
+</table>
+<table x="1441" y="801" name="CondicionDeContrato">
+<row name="idCondicionDeContrato" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreCondicionDeContrato" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idCondicionDeContrato</part>
+</key>
+</table>
+<table x="1746" y="140" name="EstacionDeTrabajo">
+<row name="idEstacionDeTrabajo" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreEstacionDeTrabajo" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idEstacionDeTrabajo</part>
+</key>
+</table>
+<table x="2274" y="238" name="Tareo">
+<row name="idTareo" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="HoraDeIngreso" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="Fecha" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idCondicionDeTareo" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="EstacionDeTrabajo" row="idEstacionDeTrabajo" />
+</row>
+<row name="idEstacionDeTrabajo" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="CondicionDeTareo" row="idCondicionDeTareo" />
+</row>
+<row name="idLicenciaConGoceDeHAber" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="LicenciaConGoceDeHaber" row="idLicenciaConGoceDeHaber" />
+</row>
+<row name="idLicenciaSinGoceDeHaber" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="LicenciaSinGoceDeHaber" row="idLicenciaSinGoceDeHaber" />
+</row>
+<row name="idDescansoMedico" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="DescansoMedico" row="idDescansoMedico" />
+</row>
+<row name="idContrato" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Contrato" row="idContrato" />
+</row>
+<row name="HoraDeSalida" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="HoraDeInicioDeAlmuerzo" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="HoraDeFinDeAlmuerzo" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idTareo</part>
+</key>
+</table>
+<table x="1750" y="227" name="CondicionDeTareo">
+<row name="idCondicionDeTareo" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreCondicionDeTareo" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idCondicionDeTareo</part>
+</key>
+</table>
+<table x="1000" y="911" name="Empleado">
+<row name="idEmpleado" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idPersona" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Persona" row="idPersona" />
+</row>
+<row name="idCargo" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Cargo" row="idCargo" />
+</row>
+<row name="idFondoDePension" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="FondoDePension" row="idFondoDePension" />
+</row>
+<row name="idDatosProfesionales" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="DatosProfesionales" row="idDatosProfesionales" />
+</row>
+<key type="PRIMARY" name="">
+<part>idEmpleado</part>
+</key>
+</table>
+<table x="1688" y="865" name="Contrato">
+<row name="idContrato" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idCondicionDeContrato" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="CondicionDeContrato" row="idCondicionDeContrato" />
+</row>
+<row name="idEmpleado" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Empleado" row="idEmpleado" />
+</row>
+<row name="FechaDeInicioDeContrato" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="FechaDeFinDeContrato" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idContrato</part>
+</key>
+</table>
+<table x="2275" y="788" name="DatosContables">
+<row name="idDatosContables" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idContrato" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Contrato" row="idContrato" />
+</row>
+<row name="SueldoBase" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="HoraHombre" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="CISPP" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idFondoDePension" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="N°DeHijos" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idDatosContables</part>
+</key>
+</table>
+<table x="787" y="1057" name="FondoDePension">
+<row name="idFondoDePension" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreEntidad" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="TipoDeFondo" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="TipoDeEmpresa" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="PorcentajeDeDescuento" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idFondoDePension</part>
+</key>
+</table>
+<table x="2713" y="867" name="Planilla">
+<row name="idPlanilla" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idPeriodo" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Periodo" row="idPeriodo" />
+</row>
+<row name="idDatosContables" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="DatosContables" row="idDatosContables" />
+</row>
+<row name="idBonos" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="idBonos" row="idBonos" />
+</row>
+<row name="idDescuentos" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Descuentos" row="idDescuento" />
+</row>
+<row name="TotalNetoAPagar" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="PagoEsSalud" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idPlanilla</part>
+</key>
+</table>
+<table x="2495" y="1304" name="Descuentos">
+<row name="idDescuento" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="ImpuestoDeQuinta" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="Tardanzas" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="Faltas" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="DescuentoFondoDePension" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idAdelandoOCreditos" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="AdelantoOCreditos" row="idAdelantoOCreditos" />
+</row>
+<key type="PRIMARY" name="">
+<part>idDescuento</part>
+</key>
+</table>
+<table x="2458" y="1007" name="idBonos">
+<row name="idBonos" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="PagoHorasExtras" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="Reintegro" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="BonoDeclarado" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="BonoProduce" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="BonoNoche" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="BonoConductor" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="BonoRotacion" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="BonoAsignacionFamiliar" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idGratificacion" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Gratificacion" row="idGratificacion" />
+</row>
+<key type="PRIMARY" name="">
+<part>idBonos</part>
+</key>
+</table>
+<table x="223" y="593" name="Localidad">
+<row name="idLocalidad" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="Ubigeo" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="Departamento" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="Provincia" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="Distrito" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idLocalidad</part>
+</key>
+</table>
+<table x="224" y="772" name="Direccion">
+<row name="idDireccion" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idTipoDeVia" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="TipoDeVia" row="idTipoDeVia" />
+</row>
+<row name="NombreVia" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="idTipoDeLocalidad" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="TipoDeLocalidad" row="idTipoDeLocalidad" />
+</row>
+<row name="NombreLocalidad" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idDireccion</part>
+</key>
+</table>
+<table x="48" y="753" name="TipoDeVia">
+<row name="idTipoDeVia" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreDeVia" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idTipoDeVia</part>
+</key>
+</table>
+<table x="26" y="901" name="TipoDeLocalidad">
+<row name="idTipoDeLocalidad" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreTipoDeLocalidad" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idTipoDeLocalidad</part>
+</key>
+</table>
+<table x="781" y="1219.7999877929688" name="DatosProfesionales">
+<row name="idDatosProfesionales" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="Profesion" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idCampoDeEstudio" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="CampoDeEstudio" row="idCampoDeEstudio" />
+</row>
+<row name="MesesDeExperiencia" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idCategoriaDeBrevete" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="CategoriaDeBrevete" row="idCategoriaDeBrevete" />
+</row>
+<key type="PRIMARY" name="">
+<part>idDatosProfesionales</part>
+</key>
+</table>
+<table x="563.1999999284744" y="1238.9999694824219" name="CampoDeEstudio">
+<row name="idCampoDeEstudio" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreCategoriaDeBrevete" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idCampoDeEstudio</part>
+</key>
+</table>
+<table x="564.1999999284744" y="1363.9999694824219" name="CategoriaDeBrevete">
+<row name="idCategoriaDeBrevete" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreCategoriaDeBrevete" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idCategoriaDeBrevete</part>
+</key>
+</table>
+<table x="198.19999992847443" y="1008.9999694824219" name="TipoDeSangre">
+<row name="idTipoDeSangre" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="new field" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreTipoDeSangre" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idTipoDeSangre</part>
+</key>
+</table>
+<table x="597" y="752.3999938964844" name="Candidato">
+<row name="idCandidato" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idPersona" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Persona" row="idPersona" />
+</row>
+<row name="PretencionSalarial" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idCargoAOptar" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Cargo" row="idCargo" />
+</row>
+<row name="MesesDeExperienciaPrevia" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="EtapaPrevia" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="LinkCurriculum" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="EtapaDeLlamada" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="EtapaDeEntrevista" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="EtapaDeContratacion" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idCandidato</part>
+</key>
+</table>
+<table x="1665.7999877929688" y="313" name="LicenciaConGoceDeHaber">
+<row name="idLicenciaConGoceDeHaber" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="FechaDeInicioLicenciaConGoceDeHaber" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="FechaDeFinLicenciaConGoceDeHaber" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="DiasHabiles" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="LinkDelDocumento" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idLicenciaConGoceDeHaber</part>
+</key>
+</table>
+<table x="1670.7999877929688" y="469" name="LicenciaSinGoceDeHaber">
+<row name="idLicenciaSinGoceDeHaber" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="FechaDeInicioLicenciaSinGoceDeHaber" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="FechaFinLicenciaSinGoceDeHaber" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="DiasHabilesAConsiderar" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="LinkDelDocumento" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idLicenciaSinGoceDeHaber</part>
+</key>
+</table>
+<table x="1712.199951171875" y="628.199951171875" name="DescansoMedico">
+<row name="idDescansoMedico" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="FechaDeInicioDescansoMedico" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="FechaDeFinDescansoMedico" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="DiasHabilesAConsiderar" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idDescansoMedico</part>
+</key>
+</table>
+<table x="2277.7999877929688" y="1346" name="AdelantoOCreditos">
+<row name="idAdelantoOCreditos" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="CreditoHastaElMomento" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="MontoAAdelantoOCreditos" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="FechaDeSolicitud" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="FechaDePago" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idAdelantoOCreditos</part>
+</key>
+</table>
+<table x="2273.9999389648438" y="617" name="Periodo">
+<row name="idPeriodo" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombrePeriodo" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="DiaDeInicioDelPeriodo" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="DiaDeFinDelPeriodo" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="CantidadDeDias" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idPeriodo</part>
+</key>
+</table>
+<table x="2679.9999389648438" y="352.5999984741211" name="PagoTareo">
+<row name="idPagoTareo" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idTareo" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Tareo" row="idTareo" />
+</row>
+<row name="CantidadDePago" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idPeriodo" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Periodo" row="idPeriodo" />
+</row>
+<key type="PRIMARY" name="">
+<part>idPagoTareo</part>
+</key>
+</table>
+<table x="2273.3999633789062" y="1021.9999694824219" name="Liquidacion">
+<row name="idLiquidacion" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idContrato" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Contrato" row="idContrato" />
+</row>
+<row name="FechaDeInicio" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="FechaDeFin" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="MontoEstimado" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="BeneficiosNoPagados" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idLiquidacion</part>
+</key>
+</table>
+<table x="2276.199951171875" y="1205.7999877929688" name="Gratificacion">
+<row name="idGratificacion" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="MesesConsiderados" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="SueldoConsiderado" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="TotalAConsiderar" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idGratificacion</part>
+</key>
+</table>
+<table x="1204.1999969482422" y="1259" name="SeguroComplementarioDeTrabajoDeRiesgo">
+<row name="idSeguroComplementarioDeTrabajoDeRiesgo" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idEmpleado" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Empleado" row="idEmpleado" />
+</row>
+<row name="idProyecto" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Proyecto" row="idProyecto" />
+</row>
+<row name="FechaDeEmision" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="FechaDeFinalizacion" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idSeguroComplementarioDeTrabajoDeRiesgo</part>
+</key>
+</table>
+<table x="747.3999938964844" y="1629.7999877929688" name="Proyecto">
+<row name="idProyecto" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreProyecto" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="new field" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idProyecto</part>
+</key>
+</table>
+<table x="1241.3999938964844" y="639.3999633789062" name="ExamenesMedicos">
+<row name="idExamenesMedicos" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idTipoDeExamenMedico" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="TipoDeExamenMedico" row="idTipoDeExamenMedico" />
+</row>
+<row name="FechaDeInicioVigencia" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="FechaDeFinVigencia" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idEmpleado" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Empleado" row="idEmpleado" />
+</row>
+<key type="PRIMARY" name="">
+<part>idExamenesMedicos</part>
+</key>
+</table>
+<table x="1006.3999938964844" y="589.3999633789062" name="TipoDeExamenMedico">
+<row name="idTipoDeExamenMedico" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreTipoDeExamenMedico" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idTipoDeExamenMedico</part>
+</key>
+</table>
+<table x="1383.9999694824219" y="1595.5999755859375" name="ProcedimientoDeHabilitacion">
+<row name="idProcedimientoDeHabilitacion" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idProyecto" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Proyecto" row="idProyecto" />
+</row>
+<row name="Nombre" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idEtapaDeProcedimientoDeHabiliatación" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><relation table="EtapaDeProcedimientoDeHabiliatación" row="idEtapaDeProcedimientoDeHabiliatación" />
+</row>
+<key type="PRIMARY" name="">
+<part>idProcedimientoDeHabilitacion</part>
+</key>
+</table>
+<table x="962.9999694824219" y="1713.5999755859375" name="EtapaDeProcedimientoDeHabiliatación">
+<row name="idEtapaDeProcedimientoDeHabiliatación" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreEtapaDeProcedimientoDeHabiliatación" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idEtapaDeProcedimientoDeHabiliatación</part>
+</key>
+</table>
+<table x="1773.9999694824219" y="1263.5999755859375" name="RegistroDeHabilitacion">
+<row name="idRegistroDeHabilitacion" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idEmpleado" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Empleado" row="idEmpleado" />
+</row>
+<row name="idEstadoDeHabilitacion" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="EstadoDeHabilitacion" row="idEstadoDeHabilitacion" />
+</row>
+<row name="idProcedimientoDeHabilitacion" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="ProcedimientoDeHabilitacion" row="idProcedimientoDeHabilitacion" />
+</row>
+<key type="PRIMARY" name="">
+<part>idRegistroDeHabilitacion</part>
+</key>
+</table>
+<table x="1496.9999694824219" y="1419.5999755859375" name="EstadoDeHabilitacion">
+<row name="idEstadoDeHabilitacion" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreEstadoDeHabilitacion" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idEstadoDeHabilitacion</part>
+</key>
+</table>
+<table x="1748.7999877929688" y="1806.199951171875" name="CursosParaHabilitacion">
+<row name="idCursosParaHabilitacion" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idProcedimientoDeHabilitacion" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="ProcedimientoDeHabilitacion" row="idProcedimientoDeHabilitacion" />
+</row>
+<row name="idCursoDeHabilitacion" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="CursoDeHabilitacion" row="idCursoDeHabilitacion" />
+</row>
+<row name="idEstadoDeCurso" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="EstadoDelCurso" row="idEstadoDelCurso" />
+</row>
+<row name="FechaDeInicioDeCertificacion" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="FechaDeFinDeCertificacion" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idCursosParaHabilitacion</part>
+</key>
+</table>
+<table x="1019.1999816894531" y="1926.199951171875" name="CursoDeHabilitacion">
+<row name="idCursoDeHabilitacion" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreCursoDeHabilitacion" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="LinkDePlataforma" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idProyecto" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Proyecto" row="idProyecto" />
+</row>
+<key type="PRIMARY" name="">
+<part>idCursoDeHabilitacion</part>
+</key>
+</table>
+<table x="1039.1999816894531" y="2118.199951171875" name="EstadoDelCurso">
+<row name="idEstadoDelCurso" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NombreEstadoDelCurso" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idEstadoDelCurso</part>
+</key>
+</table>
+<table x="2119.199951171875" y="1554.5999755859375" name="AsignacionDePersonal">
+<row name="idRegistroDeHabilitacion" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="RegistroDeHabilitacion" row="idRegistroDeHabilitacion" />
+</row>
+<row name="FechaDeInicioDeAsignación" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="FechaDeFinDeAsignacion" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idRegistroDeHabilitacion</part>
+</key>
+</table>
+<table x="237" y="125" name="Login">
+<row name="idLogin" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="User" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="Password" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="idEmpleado" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idLogin</part>
+</key>
+</table>
+</sql>
