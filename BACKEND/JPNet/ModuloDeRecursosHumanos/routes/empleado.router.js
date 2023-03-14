@@ -173,7 +173,7 @@ router.get("/cargos", async (req, res) => {
 
 router.get("/getforlimit", async (req, res) => {
   try {
-    const info = await empleadoController.getForLimit(req.body.idEmpleado, 10);
+    const info = await empleadoController.getForLimit(req.body.idEmpleado, 50);
     res.setHeader("Content-Type", "application/json");
     if (info.status == null || info.status == "error" || info.id == null) {
       res.status(502).end(JSON.stringify(info)).json({

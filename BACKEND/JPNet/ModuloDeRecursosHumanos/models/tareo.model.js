@@ -25,6 +25,31 @@ class TareoModel
         }      
   }
 
+
+  async getObtenerTareoDelPeriodo(Periodo){
+    try {
+        const con = connectionDb.promise();
+        const data = await con.query(
+          "CALL ObtenerTareoPlanillaDelPeriodo(?)",[Periodo]);
+        return  data[0];
+      } catch (error) {
+        console.log(error);
+        return { status: "error" };
+      }      
+}
+
+async deleteCalculoDePago(Periodo){
+  try {
+      const con = connectionDb.promise();
+      const data = await con.query(
+        "CALL ReiniciarPlanillaDelPeriodo(?)",[Periodo]);
+      return  data[0];
+    } catch (error) {
+      console.log(error);
+      return { status: "error" };
+    }      
+}
+
     async createComun(FechaIN,HoraIngreso, HoraAlmuerzo, HoraFinDeAlmuerzo, HoraSalida,idEmpleado,idEstacion){
       try {
           const con = connectionDb.promise();

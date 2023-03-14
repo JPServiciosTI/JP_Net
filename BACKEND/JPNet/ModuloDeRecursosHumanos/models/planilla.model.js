@@ -101,27 +101,6 @@ class PlanillaModel {
         }
       }
 
-
-      async CalcularRemuneracionBruta(DNI,Fecha_Inicio,Fecha_Fin ) {
-        try {
-          const con = connectionDb.promise();
-          const data = await con.query(
-            "CALL CalcularRemuneracionBruta(?,?,?)",
-            [
-              DNI,Fecha_Inicio,Fecha_Fin
-            ]
-          );
-          return { status: "ok", id: data[0] };
-        } catch (error) {
-          console.log(error);
-          return { status: "error" };
-        }
-      }
-
-
-
-
-
 }
 
 module.exports = PlanillaModel;
