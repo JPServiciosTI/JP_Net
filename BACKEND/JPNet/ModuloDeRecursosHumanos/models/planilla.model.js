@@ -85,6 +85,23 @@ class PlanillaModel {
         }
       }
 
+
+      async ObtenerCantidadDeFaltas(DNI,Fecha_Inicio,Fecha_Fin ) {
+        try {
+          const con = connectionDb.promise();
+          const data = await con.query(
+            "CALL ObtenerFaltasPorDNI(?,?,?)",
+            [
+                DNI,Fecha_Inicio,Fecha_Fin
+            ]
+          );
+          return {id: data[0][0]} ;
+        } catch (error) {
+          console.log(error);
+          return { status: "error" };
+        }
+      }
+
       async ObtenerPersonalParaPlanilla(Fecha_Inicio,Fecha_Fin ) {
         try {
           const con = connectionDb.promise();

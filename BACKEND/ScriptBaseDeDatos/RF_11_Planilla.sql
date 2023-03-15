@@ -1,16 +1,5 @@
 USE jpnet;
 DELIMITER //
-DROP PROCEDURE IF EXISTS ObtenerPlanilla;
-CREATE PROCEDURE ObtenerPlanilla(IN REG_INICIO INT, IN CANTIDAD_IN INT)
-BEGIN
-	SELECT * FROM jpnet.empleado CN INNER JOIN  jpnet.persona PO ON CN.idPersona = PO.idPersona  INNER JOIN jpnet.contrato CT ON CT.idEmpleado = CN.idEmpleado WHERE CN.idEmpleado >= REG_INICIO AND CT.idCondicionDeContrato = 1 LIMIT CANTIDAD_IN;
-END//
- DELIMITER ;
- 
-
-
-USE jpnet;
-DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerDatosPeriodo;
 CREATE PROCEDURE ObtenerDatosPeriodo()
 BEGIN
@@ -65,14 +54,15 @@ CREATE PROCEDURE CalcularRemuneracionBruta(IN DNI_IN VARCHAR(10), IN FINICIO_IN 
 BEGIN
 	DECLARE IDEmpleado INT;
     DECLARE IDContrato INT;
-	SET IDEmpleado = (SELECT EMP.idEmpleado FROM empleado EMP INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN); 
-	SET IDContrato = (SELECT CT.idContrato FROM jpnet.contrato CT INNER JOIN jpnet.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN AND CT.idCondicionDeContrato =1);
-	SELECT ROUND(SUM(PG.CantidadDePago), 2)AS SueldoBruto, ROUND(SUM(PG.CantidadDePago), 2)*0.09 AS EsSalud FROM jpnet.pagotareo PG INNER JOIN jpnet.tareo TAR ON PG.idTareo = TAR.idTareo WHERE TAR.Fecha >= FINICIO_IN AND FECHAFIN_IN >= TAR.Fecha AND TAR.idContrato = IDContrato;
+	SET IDEmpleado = (SELECT EMP.idEmpleado FROM jpingenieria_jpnet2023.empleado EMP INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN); 
+	SET IDContrato = (SELECT CT.idContrato FROM jpingenieria_jpnet2023.contrato CT INNER JOIN jpingenieria_jpnet2023.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN AND CT.idCondicionDeContrato =1);
+	SELECT PG.idPeriodo,ROUND(SUM(PG.CantidadDePago), 2)AS SueldoBruto, ROUND(SUM(PG.CantidadDePago), 2)*0.09 AS EsSalud FROM jpingenieria_jpnet2023.pagotareo PG INNER JOIN jpingenieria_jpnet2023.tareo TAR ON PG.idTareo = TAR.idTareo WHERE TAR.Fecha >= FINICIO_IN AND FECHAFIN_IN >= TAR.Fecha AND TAR.idContrato = IDContrato GROUP BY PG.idPeriodo;
 END//
 DELIMITER ;
 
+SELECT ROUND(SUM(PG.CantidadDePago), 2)AS SueldoBruto, ROUND(SUM(PG.CantidadDePago), 2)*0.09 AS EsSalud FROM jpingenieria_jpnet2023.pagotareo PG INNER JOIN jpingenieria_jpnet2023.tareo TAR ON PG.idTareo = TAR.idTareo WHERE TAR.Fecha >= '2023-01-16' AND '2023-02-15' >= TAR.Fecha AND TAR.idContrato = 17;
 
-CALL CalcularRemuneracionBruta("73349166",'2023-01-16','2023-02-15');
+CALL CalcularRemuneracionBruta("47266814",'2023-01-16','2023-02-15');
 
 USE jpnet;
 DELIMITER //
@@ -115,7 +105,7 @@ END//
 DELIMITER ;
 CALL ObtenerPlanilla('2023-01-16','2023-02-15');
 
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerTardanzasPorDNI;
 CREATE PROCEDURE ObtenerTardanzasPorDNI( IN DNI_IN VARCHAR(10) ,IN FINICIO_IN DATE,IN FECHAFIN_IN DATE )
@@ -123,8 +113,43 @@ BEGIN
 	DECLARE IDEmpleado INT;
     DECLARE IDContrato INT;
 	SET IDEmpleado = (SELECT EMP.idEmpleado FROM empleado EMP INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN); 
-	SET IDContrato = (SELECT CT.idContrato FROM jpnet.contrato CT INNER JOIN jpnet.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN AND CT.idCondicionDeContrato =1);
-	SELECT COUNT(TR.idTareo) AS Faltas  FROM tareo TR WHERE TR.idCondicionDeTareo = 3 AND TR.idContrato = IDContrato;
+	SET IDContrato = (SELECT CT.idContrato FROM jpingenieria_jpnet2023.contrato CT INNER JOIN jpingenieria_jpnet2023.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN AND CT.idCondicionDeContrato =1);
+	SELECT COUNT(TR.idTareo) AS Tardanzas  FROM tareo TR WHERE TR.idCondicionDeTareo = 2 AND TR.idContrato = IDContrato;
 END//
 DELIMITER ;
 CALL ObtenerTardanzasPorDNI("71234180",'2023-01-16','2023-02-15');
+
+
+USE jpingenieria_jpnet2023;
+DELIMITER //
+DROP PROCEDURE IF EXISTS ObtenerFaltasPorDNI;
+CREATE PROCEDURE ObtenerFaltasPorDNI( IN DNI_IN VARCHAR(10) ,IN FINICIO_IN DATE,IN FECHAFIN_IN DATE )
+BEGIN
+	DECLARE IDEmpleado INT;
+    DECLARE IDContrato INT;
+	SET IDEmpleado = (SELECT EMP.idEmpleado FROM empleado EMP INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN); 
+	SET IDContrato = (SELECT CT.idContrato FROM jpingenieria_jpnet2023.contrato CT INNER JOIN jpingenieria_jpnet2023.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN AND CT.idCondicionDeContrato =1);
+	SELECT COUNT(TR.idTareo) AS Faltas  FROM tareo TR WHERE TR.idCondicionDeTareo = 3 AND TR.idContrato = IDContrato;
+END//
+DELIMITER ;
+CALL ObtenerFaltasPorDNI("71234180",'2023-01-16','2023-02-15');
+
+USE jpingenieria_jpnet2023;
+DELIMITER //
+DROP PROCEDURE IF EXISTS ObtenerTareoPlanillaDelPeriodo;
+CREATE PROCEDURE ObtenerTareoPlanillaDelPeriodo(IN Periodo_IN INT )
+BEGIN
+	SELECT idPagoTareo FROM jpingenieria_jpnet2023.pagotareo WHERE idPeriodo = Periodo_IN LIMIT 1;
+END//
+DELIMITER ;
+CALL ObtenerTareoPlanillaDelPeriodo(2);
+
+USE jpingenieria_jpnet2023;
+DELIMITER //
+DROP PROCEDURE IF EXISTS ReiniciarPlanillaDelPeriodo;
+CREATE PROCEDURE ReiniciarPlanillaDelPeriodo(IN Periodo_IN INT )
+BEGIN
+	DELETE FROM jpingenieria_jpnet2023.pagotareo WHERE idPeriodo = Periodo_IN;
+END//
+DELIMITER ;
+CALL ReiniciarPlanillaDelPeriodo(2);

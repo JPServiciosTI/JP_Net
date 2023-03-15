@@ -18,6 +18,9 @@ const tareoDb = new TareoModel();
 const EmpleadoModel = require("../models/empleado.model");
 const empleadoDb = new EmpleadoModel();
 
+const DescuentoModel = require("../models/descuentos.model");
+const descuentoDb = new DescuentoModel();
+
 class PlanillaController {
   async CalcularPagosATrabajadores(FechaInicio, FechaFin, PeriodoIN) {
     
@@ -209,15 +212,31 @@ class PlanillaController {
   }
 
 
+  async obtenerDescuentos(idContrato,Periodo) {
+    try {
+      const result = descuentoDb.getDescuentos(idContrato,Periodo);
+      const data = await result.catch((err) => {
+        console.log("Controller Error: ", err);
+        return { status: "error", id: null };
+      });
+      return data;
+    } catch (error) {
+      console.log("Controller Error: ", error);
+      return { status: "error", id: null };
+    }
+  }
+
+
+
   async calcularImpuestoQuintaCategoria(remuneracionMensual) {
-    const UIT = 4950; // Unidad Impositiva Tributaria
+    const UIT = 4600; // Unidad Impositiva Tributaria
     let MontoSupuesto = remuneracionMensual*12;
     let GratificacionesEstimada =  remuneracionMensual*2 ;
     let BonificacionLey29351 = GratificacionesEstimada*0.09;
     let SaldoGravado = MontoSupuesto+GratificacionesEstimada+BonificacionLey29351 - UIT*7 ;
     // Porcentaje del impuesto de quinta categoría
     const tramoIngreso = [0.08,0.14,0.17,0.2,0.3];
-    const maximoPorTramo = [5,20,35,45,1000000];
+    const maximoPorTramo = [0,5,20,35,45,1000000];
     let SaldoRestante = SaldoGravado;
     let SumaDelImpuesto = 0;
     console.log("Total: ",MontoSupuesto+GratificacionesEstimada,"Gravado: ",SaldoGravado);
@@ -225,17 +244,18 @@ class PlanillaController {
       if (SaldoGravado <= 0) {
         break;
       }
-      if(maximoPorTramo[i]*UIT >= SaldoRestante){
+      let TramoCalculado = (maximoPorTramo[i+1]-maximoPorTramo[i]);
+      if(TramoCalculado*UIT >= SaldoRestante){
         SumaDelImpuesto = SumaDelImpuesto + SaldoRestante*tramoIngreso[i];
         
-        console.log("Tramo: ",i," Max:",maximoPorTramo[i]*UIT,"Pago :", SaldoRestante*tramoIngreso[i],"YO: ",SaldoRestante, "uma: ", SumaDelImpuesto, "Abonado del Tramo ",SaldoRestante*tramoIngreso[i]);
+        console.log("Tramo: ",i," Max:",TramoCalculado*UIT,"Pago :", SaldoRestante*tramoIngreso[i],"YO: ",SaldoRestante, "uma: ", SumaDelImpuesto, "Abonado del Tramo ",SaldoRestante*tramoIngreso[i]);
         SaldoRestante = 0;
         break;
       }else{
         //console.log("Tramo: ",i," Max:",maximoPorTramo[i]*UIT,"YO: ",SaldoRestante)
-        SumaDelImpuesto = SumaDelImpuesto + maximoPorTramo[i]*UIT*tramoIngreso[i];
-        SaldoRestante = SaldoRestante - maximoPorTramo[i]*UIT
-        console.log("Tramo: ",i," Max:",maximoPorTramo[i]*UIT, "Pago :", maximoPorTramo[i]*UIT*tramoIngreso[i],"YO: ",SaldoRestante, "uma: ", SumaDelImpuesto,"Abonado del Tramo ",maximoPorTramo[i]*UIT*tramoIngreso[i]);
+        SumaDelImpuesto = SumaDelImpuesto + TramoCalculado*UIT*tramoIngreso[i];
+        SaldoRestante = SaldoRestante - TramoCalculado*UIT
+        console.log("Tramo: ",i," Max:",TramoCalculado*UIT, "Pago :", TramoCalculado*UIT*tramoIngreso[i],"YO: ",SaldoRestante, "uma: ", SumaDelImpuesto,"Abonado del Tramo ",maximoPorTramo[i]*UIT*tramoIngreso[i]);
       }
     }
     // Redondeamos el impuesto a dos decimales
@@ -246,7 +266,7 @@ class PlanillaController {
   }
   
 
-  async obtenerEmpleadosPlanilla(FechaInicio, FechaFin) {
+  async obtenerPreGeneradoDePlanilla(FechaInicio, FechaFin) {
     const SueldoMinimoVial = 1025;
     try {
       const result = planillaDb.ObtenerPersonalParaPlanilla(
@@ -254,7 +274,7 @@ class PlanillaController {
         FechaFin
       );
       const data = await result.catch((err) => {
-        console.log("Controller Error: ", err);
+        console.log("Controller Data Personal Error: ", err);
         return { status: "error", id: null };
       });
       for (let i = 0; i < data["id"][0].length; i++) {
@@ -265,7 +285,7 @@ class PlanillaController {
           FechaFin
         );
         const data3 = await result3.catch((err) => {
-          console.log("Controller Error: ", err);
+          console.log("Controller Data Sueldo Error: ", err);
           return { status: "error", id: null };
         });
 
@@ -275,10 +295,31 @@ class PlanillaController {
           FechaFin
         );
         const dataTardanza = await resultTardanza.catch((err) => {
-          console.log("Controller Error: ", err);
+          console.log("Controller Data Tardanza Error: ", err);
           return { status: "error", id: null };
         });
-        data["id"][0][i].SueldoBruto = data3["id"][0].SueldoBruto;
+
+        const resultFaltas = planillaDb.ObtenerCantidadDeFaltas(
+          DNI_IN,
+          FechaInicio,
+          FechaFin
+        );
+        const dataFaltas = await resultFaltas.catch((err) => {
+          console.log("Controller Data Faltas Error: ", err);
+          return { status: "error", id: null };
+        });
+        
+        console.log("Faltas> ",dataFaltas["id"][0].Faltas)
+        data["id"][0][i].Faltas = dataFaltas["id"][0].Faltas;
+        console.log("Faltas> ",data["id"][0][i].Faltas)
+        data["id"][0][i].Tardanza = dataTardanza["id"][0].Tardanzas || 0;
+        data["id"][0][i].Periodo = data3["id"][0].idPeriodo || 0;
+
+        if (data["id"][0][i].SueldoBase <= data3["id"][0].SueldoBruto) {
+          data["id"][0][i].SueldoTareado = data["id"][0][i].SueldoBase;
+        } else {
+          data["id"][0][i].SueldoTareado = data3["id"][0].SueldoBruto;
+        }
         data["id"][0][i].EsSalud = data3["id"][0].EsSalud;
         data["id"][0][i].EsSalud = parseFloat(data["id"][0][i].EsSalud).toFixed(
           2
@@ -291,12 +332,14 @@ class PlanillaController {
         } else {
           data["id"][0][i].AsignacionFamiliar = 0;
         }
-        data["id"][0][i].Asegurable =
-          data["id"][0][i].SueldoBruto + data["id"][0][i].AsignacionFamiliar;
-        data["id"][0][i].DescuentoAFP = (
-          data["id"][0][i].SueldoBruto * data["id"][0][i].PorcentajeDeDescuento
-        ).toFixed(2);
 
+        data["id"][0][i].CompensacionesAdicionales = data["id"][0][i].AsignacionFamiliar
+        data["id"][0][i].Asegurable =
+          data["id"][0][i].SueldoTareado + data["id"][0][i].AsignacionFamiliar;
+        data["id"][0][i].DescuentoAFP = (
+          data["id"][0][i].SueldoTareado * data["id"][0][i].PorcentajeDeDescuento
+        ).toFixed(2);
+        data
         /**
          * Funcion para el calculo de Quinta Categoria
          */
@@ -307,25 +350,22 @@ class PlanillaController {
         let SaldoGravado = MontoSupuesto+GratificacionesEstimada+BonificacionLey29351 - UIT*7 ;
         // Porcentaje del impuesto de quinta categoría
         const tramoIngreso = [0.08,0.14,0.17,0.2,0.3];
-        const maximoPorTramo = [5,20,35,45,1000000];
+        const maximoPorTramo = [0,5,20,35,45,1000000];
         let SaldoRestante = SaldoGravado;
         let SumaDelImpuesto = 0;
-        console.log("Total: ",MontoSupuesto+GratificacionesEstimada,"Gravado: ",SaldoGravado);
+        //console.log("Total: ",MontoSupuesto+GratificacionesEstimada,"Gravado: ",SaldoGravado);
         for (let i = 0; i < tramoIngreso.length; i++) {
           if (SaldoGravado <= 0) {
             break;
           }
-          if(maximoPorTramo[i]*UIT >= SaldoRestante){
+          let TramoCalculado = (maximoPorTramo[i+1]-maximoPorTramo[i]);
+          if(TramoCalculado*UIT >= SaldoRestante){
             SumaDelImpuesto = SumaDelImpuesto + SaldoRestante*tramoIngreso[i];
-            
-            console.log("Tramo: ",i," Max:",maximoPorTramo[i]*UIT,"Pago :", SaldoRestante*tramoIngreso[i],"YO: ",SaldoRestante, "uma: ", SumaDelImpuesto, "Abonado del Tramo ",SaldoRestante*tramoIngreso[i]);
             SaldoRestante = 0;
             break;
           }else{
-            //console.log("Tramo: ",i," Max:",maximoPorTramo[i]*UIT,"YO: ",SaldoRestante)
-            SumaDelImpuesto = SumaDelImpuesto + maximoPorTramo[i]*UIT*tramoIngreso[i];
-            SaldoRestante = SaldoRestante - maximoPorTramo[i]*UIT
-            console.log("Tramo: ",i," Max:",maximoPorTramo[i]*UIT, "Pago :", maximoPorTramo[i]*UIT*tramoIngreso[i],"YO: ",SaldoRestante, "uma: ", SumaDelImpuesto,"Abonado del Tramo ",maximoPorTramo[i]*UIT*tramoIngreso[i]);
+            SumaDelImpuesto = SumaDelImpuesto + TramoCalculado*UIT*tramoIngreso[i];
+            SaldoRestante = SaldoRestante - TramoCalculado*UIT
           }
         }
         // Redondeamos el impuesto a dos decimales
@@ -339,13 +379,29 @@ class PlanillaController {
         data["id"][0][i].TotalDescuentos =
           parseFloat(data["id"][0][i].DescuentoAFP) +
           parseFloat(data["id"][0][i].RentaDeQuinta);
+
+          data["id"][0][i].TotalDescuentos = parseFloat(data["id"][0][i].TotalDescuentos).toFixed(2);
         data["id"][0][i].NetoTotal =
           data["id"][0][i].Asegurable - data["id"][0][i].TotalDescuentos;
         data["id"][0][i].NetoTotal = parseFloat(
           data["id"][0][i].NetoTotal
         ).toFixed(2);
-        data["id"][0][i].Faltas = data3["id"][0].Faltas;
+        
+        const resultDescuentos = descuentoDb.createDescuentoDeLey(
+          data["id"][0][i].Periodo,
+          data["id"][0][i].idContrato,
+          data["id"][0][i].RentaDeQuinta,
+          data["id"][0][i].Tardanza,
+          data["id"][0][i].Faltas,
+          data["id"][0][i].DescuentoAFP
+        );
+        const dataDescuentos = await resultDescuentos.catch((err) => {
+          console.log("Controller Data Descuento Error: ", err);
+          return { status: "error", id: null };
+        });
+
       }
+      console.log("ertyui");
       return data;
     } catch (error) {
       console.log("Controller Error: ", error);
