@@ -18,29 +18,27 @@ const tareoDb = new TareoModel();
 const EmpleadoModel = require("../models/empleado.model");
 const empleadoDb = new EmpleadoModel();
 
-const DescuentoModel = require("../models/descuentos.model");
-const descuentoDb = new DescuentoModel();
+//const DescuentoModel = require("../models/descuentos.model");
+//const descuentoDb = new DescuentoModel();
 
 class PlanillaController {
   async CalcularPagosATrabajadores(FechaInicio, FechaFin, PeriodoIN) {
-    
-    const resultExitenciaDelPeriodo = tareoDb.getObtenerTareoDelPeriodo(
-      PeriodoIN
+    const resultExitenciaDelPeriodo =
+      tareoDb.getObtenerTareoDelPeriodo(PeriodoIN);
+    const dataExitenciaDelPeriodo = await resultExitenciaDelPeriodo.catch(
+      (err) => {
+        console.log("Controller Error: ", err);
+        // return { status: "error Tareo", id: null };
+      }
     );
-    const dataExitenciaDelPeriodo= await resultExitenciaDelPeriodo.catch((err) => {
-      console.log("Controller Error: ", err);
-      // return { status: "error Tareo", id: null };
-    });
-    if(dataExitenciaDelPeriodo[0].length > 0){
-      const resultEliminarCalculo = tareoDb.deleteCalculoDePago(
-        PeriodoIN
-      );
+    if (dataExitenciaDelPeriodo[0].length > 0) {
+      const resultEliminarCalculo = tareoDb.deleteCalculoDePago(PeriodoIN);
       const dataEliminarCalculo = await resultEliminarCalculo.catch((err) => {
         console.log("Controller Error: ", err);
         // return { status: "error Tareo", id: null };
-      });     
+      });
     }
-    
+
     const result1 = empleadoDb.getEmpleadoForLimitParaPlanilla(0, 100);
     const dataEmpleados = await result1.catch((err) => {
       console.log("Controller Error: ", err);
@@ -48,7 +46,6 @@ class PlanillaController {
     });
     //console.log(dataEmpleados.id[0]);
 
-    
     for (let i = 0; i < dataEmpleados.id[0].length; i++) {
       try {
         const resultTareo = tareoDb.getTareoPorFechaEnMinutos(
@@ -117,8 +114,10 @@ class PlanillaController {
                     if (dataTareo[0][temp].TiempoCalculado >= 510) {
                       sumTareoDelTiempoNeto = 510 + sumTareoDelTiempoNeto;
                     } else {
-                      sumTareoDelTiempoNeto = dataTareo[0][temp].TiempoCalculado + sumTareoDelTiempoNeto;
-                    } 
+                      sumTareoDelTiempoNeto =
+                        dataTareo[0][temp].TiempoCalculado +
+                        sumTareoDelTiempoNeto;
+                    }
                   }
                   sumTareoDelTiempoNeto = sumTareoDelTiempoNeto / 60 / 6;
                   let sumDom = 0;
@@ -173,9 +172,7 @@ class PlanillaController {
               return { status: "error Pago", id: null };
             });
           }
-          
         }
-        
       } catch (error) {
         console.log(error);
       }
@@ -210,11 +207,10 @@ class PlanillaController {
       return { status: "error", id: null };
     }
   }
-
-
-  async obtenerDescuentos(idContrato,Periodo) {
+  /*
+  async obtenerDescuentos(idContrato, Periodo) {
     try {
-      const result = descuentoDb.getDescuentos(idContrato,Periodo);
+      const result = descuentoDb.getDescuentos(idContrato, Periodo);
       const data = await result.catch((err) => {
         console.log("Controller Error: ", err);
         return { status: "error", id: null };
@@ -225,46 +221,41 @@ class PlanillaController {
       return { status: "error", id: null };
     }
   }
-
-
-
+*/
   async calcularImpuestoQuintaCategoria(remuneracionMensual) {
     const UIT = 4600; // Unidad Impositiva Tributaria
-    let MontoSupuesto = remuneracionMensual*12;
-    let GratificacionesEstimada =  remuneracionMensual*2 ;
-    let BonificacionLey29351 = GratificacionesEstimada*0.09;
-    let SaldoGravado = MontoSupuesto+GratificacionesEstimada+BonificacionLey29351 - UIT*7 ;
+    let MontoSupuesto = remuneracionMensual * 12;
+    let GratificacionesEstimada = remuneracionMensual * 2;
+    let BonificacionLey29351 = GratificacionesEstimada * 0.09;
+    let SaldoGravado =
+      MontoSupuesto + GratificacionesEstimada + BonificacionLey29351 - UIT * 7;
     // Porcentaje del impuesto de quinta categoría
-    const tramoIngreso = [0.08,0.14,0.17,0.2,0.3];
-    const maximoPorTramo = [0,5,20,35,45,1000000];
+    const tramoIngreso = [0.08, 0.14, 0.17, 0.2, 0.3];
+    const maximoPorTramo = [0, 5, 20, 35, 45, 1000000];
     let SaldoRestante = SaldoGravado;
     let SumaDelImpuesto = 0;
-    console.log("Total: ",MontoSupuesto+GratificacionesEstimada,"Gravado: ",SaldoGravado);
     for (let i = 0; i < tramoIngreso.length; i++) {
       if (SaldoGravado <= 0) {
         break;
       }
-      let TramoCalculado = (maximoPorTramo[i+1]-maximoPorTramo[i]);
-      if(TramoCalculado*UIT >= SaldoRestante){
-        SumaDelImpuesto = SumaDelImpuesto + SaldoRestante*tramoIngreso[i];
-        
-        console.log("Tramo: ",i," Max:",TramoCalculado*UIT,"Pago :", SaldoRestante*tramoIngreso[i],"YO: ",SaldoRestante, "uma: ", SumaDelImpuesto, "Abonado del Tramo ",SaldoRestante*tramoIngreso[i]);
+      let TramoCalculado = maximoPorTramo[i + 1] - maximoPorTramo[i];
+      if (TramoCalculado * UIT >= SaldoRestante) {
+        SumaDelImpuesto = SumaDelImpuesto + SaldoRestante * tramoIngreso[i];
         SaldoRestante = 0;
         break;
-      }else{
+      } else {
         //console.log("Tramo: ",i," Max:",maximoPorTramo[i]*UIT,"YO: ",SaldoRestante)
-        SumaDelImpuesto = SumaDelImpuesto + TramoCalculado*UIT*tramoIngreso[i];
-        SaldoRestante = SaldoRestante - TramoCalculado*UIT
-        console.log("Tramo: ",i," Max:",TramoCalculado*UIT, "Pago :", TramoCalculado*UIT*tramoIngreso[i],"YO: ",SaldoRestante, "uma: ", SumaDelImpuesto,"Abonado del Tramo ",maximoPorTramo[i]*UIT*tramoIngreso[i]);
+        SumaDelImpuesto =
+          SumaDelImpuesto + TramoCalculado * UIT * tramoIngreso[i];
+        SaldoRestante = SaldoRestante - TramoCalculado * UIT;
       }
     }
     // Redondeamos el impuesto a dos decimales
-    const impuestoRedondeado = Math.round(SumaDelImpuesto/ 12 * 100) / 100 ;
-    
+    const impuestoRedondeado = Math.round((SumaDelImpuesto / 12) * 100) / 100;
+
     // Devolvemos el resultado
     return impuestoRedondeado;
   }
-  
 
   async obtenerPreGeneradoDePlanilla(FechaInicio, FechaFin) {
     const SueldoMinimoVial = 1025;
@@ -308,10 +299,10 @@ class PlanillaController {
           console.log("Controller Data Faltas Error: ", err);
           return { status: "error", id: null };
         });
-        
-        console.log("Faltas> ",dataFaltas["id"][0].Faltas)
+
+        console.log("Faltas> ", dataFaltas["id"][0].Faltas);
         data["id"][0][i].Faltas = dataFaltas["id"][0].Faltas;
-        console.log("Faltas> ",data["id"][0][i].Faltas)
+        console.log("Faltas> ", data["id"][0][i].Faltas);
         data["id"][0][i].Tardanza = dataTardanza["id"][0].Tardanzas || 0;
         data["id"][0][i].Periodo = data3["id"][0].idPeriodo || 0;
 
@@ -333,24 +324,30 @@ class PlanillaController {
           data["id"][0][i].AsignacionFamiliar = 0;
         }
 
-        data["id"][0][i].CompensacionesAdicionales = data["id"][0][i].AsignacionFamiliar
+        data["id"][0][i].CompensacionesAdicionales =
+          data["id"][0][i].AsignacionFamiliar;
         data["id"][0][i].Asegurable =
           data["id"][0][i].SueldoTareado + data["id"][0][i].AsignacionFamiliar;
         data["id"][0][i].DescuentoAFP = (
-          data["id"][0][i].SueldoTareado * data["id"][0][i].PorcentajeDeDescuento
+          data["id"][0][i].SueldoTareado *
+          data["id"][0][i].PorcentajeDeDescuento
         ).toFixed(2);
-        data
+        data;
         /**
          * Funcion para el calculo de Quinta Categoria
          */
         const UIT = 4950; // Unidad Impositiva Tributaria
-        let MontoSupuesto = data["id"][0][i].SueldoBase*12;
-        let GratificacionesEstimada = data["id"][0][i].SueldoBase*2 ;
-        let BonificacionLey29351 = GratificacionesEstimada*0.09;
-        let SaldoGravado = MontoSupuesto+GratificacionesEstimada+BonificacionLey29351 - UIT*7 ;
+        let MontoSupuesto = data["id"][0][i].SueldoBase * 12;
+        let GratificacionesEstimada = data["id"][0][i].SueldoBase * 2;
+        let BonificacionLey29351 = GratificacionesEstimada * 0.09;
+        let SaldoGravado =
+          MontoSupuesto +
+          GratificacionesEstimada +
+          BonificacionLey29351 -
+          UIT * 7;
         // Porcentaje del impuesto de quinta categoría
-        const tramoIngreso = [0.08,0.14,0.17,0.2,0.3];
-        const maximoPorTramo = [0,5,20,35,45,1000000];
+        const tramoIngreso = [0.08, 0.14, 0.17, 0.2, 0.3];
+        const maximoPorTramo = [0, 5, 20, 35, 45, 1000000];
         let SaldoRestante = SaldoGravado;
         let SumaDelImpuesto = 0;
         //console.log("Total: ",MontoSupuesto+GratificacionesEstimada,"Gravado: ",SaldoGravado);
@@ -358,35 +355,38 @@ class PlanillaController {
           if (SaldoGravado <= 0) {
             break;
           }
-          let TramoCalculado = (maximoPorTramo[i+1]-maximoPorTramo[i]);
-          if(TramoCalculado*UIT >= SaldoRestante){
-            SumaDelImpuesto = SumaDelImpuesto + SaldoRestante*tramoIngreso[i];
+          let TramoCalculado = maximoPorTramo[i + 1] - maximoPorTramo[i];
+          if (TramoCalculado * UIT >= SaldoRestante) {
+            SumaDelImpuesto = SumaDelImpuesto + SaldoRestante * tramoIngreso[i];
             SaldoRestante = 0;
             break;
-          }else{
-            SumaDelImpuesto = SumaDelImpuesto + TramoCalculado*UIT*tramoIngreso[i];
-            SaldoRestante = SaldoRestante - TramoCalculado*UIT
+          } else {
+            SumaDelImpuesto =
+              SumaDelImpuesto + TramoCalculado * UIT * tramoIngreso[i];
+            SaldoRestante = SaldoRestante - TramoCalculado * UIT;
           }
         }
         // Redondeamos el impuesto a dos decimales
-        const impuestoRedondeado = Math.round(SumaDelImpuesto/ 12 * 100) / 100 ;
-        
-        // FIN DE LA FUNCION DE QUINTA CATEGORIA
-        
-        data["id"][0][i].RentaDeQuinta = impuestoRedondeado;
+        const impuestoRedondeado =
+          Math.round((SumaDelImpuesto / 12) * 100) / 100;
 
+        // FIN DE LA FUNCION DE QUINTA CATEGORIA
+
+        data["id"][0][i].RentaDeQuinta = impuestoRedondeado;
 
         data["id"][0][i].TotalDescuentos =
           parseFloat(data["id"][0][i].DescuentoAFP) +
           parseFloat(data["id"][0][i].RentaDeQuinta);
 
-          data["id"][0][i].TotalDescuentos = parseFloat(data["id"][0][i].TotalDescuentos).toFixed(2);
+        data["id"][0][i].TotalDescuentos = parseFloat(
+          data["id"][0][i].TotalDescuentos
+        ).toFixed(2);
         data["id"][0][i].NetoTotal =
           data["id"][0][i].Asegurable - data["id"][0][i].TotalDescuentos;
         data["id"][0][i].NetoTotal = parseFloat(
           data["id"][0][i].NetoTotal
         ).toFixed(2);
-        
+        /*
         const resultDescuentos = descuentoDb.createDescuentoDeLey(
           data["id"][0][i].Periodo,
           data["id"][0][i].idContrato,
@@ -399,9 +399,9 @@ class PlanillaController {
           console.log("Controller Data Descuento Error: ", err);
           return { status: "error", id: null };
         });
-
+      */
       }
-      console.log("ertyui");
+      //console.log("ertyui");
       return data;
     } catch (error) {
       console.log("Controller Error: ", error);

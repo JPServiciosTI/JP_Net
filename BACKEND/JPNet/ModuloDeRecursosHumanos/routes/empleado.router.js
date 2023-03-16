@@ -16,33 +16,30 @@ const cargarArchivosController = require("../controllers/cargarArchivos.controll
 const fs = require("fs/promises");
 const path = require("path");
 
-
-
-const multer = require('multer');
+const multer = require("multer");
 const mimeTypes = require("mime-types");
 
-
 const storage = multer.diskStorage({
-  destination: 'upload/',
-  filename: function(req,file,cb){
-    cb("",Date.now()+file.originalname+"." + mimeTypes.extension(file.mimetype));
-  }
-  
-})
+  destination: "upload/",
+  filename: function (req, file, cb) {
+    cb(
+      "",
+      Date.now() + file.originalname + "." + mimeTypes.extension(file.mimetype)
+    );
+  },
+});
 
 const upload = multer({
-  storage: storage
-})
+  storage: storage,
+});
 
-router.get("/image", (req,res)=>{
+router.get("/image", (req, res) => {
   console.log(__dirname);
-})
+});
 
-
-router.get("/files",upload.single('image') ,(req,res)=>{
-  res.send('Tudo bem');
-})
-
+router.get("/files", upload.single("image"), (req, res) => {
+  res.send("Tudo bem");
+});
 
 router.post("/register", async (req, res) => {
   try {
@@ -217,13 +214,16 @@ router.post("/gettareo", async (req, res) => {
 });
 
 router.post("/register/tareo/comun", async (req, res) => {
-  console.log("AQUI",      req.body.fecha,
-  req.body.idEmpleado,
-  req.body.horaIngreso,
-  req.body.horaInicioAlmuerzo,
-  req.body.horaFinAlmuerzo,
-  req.body.horaSalida,
-  req.body.idEstacionDeTrabajo)
+  console.log(
+    "AQUI",
+    req.body.fecha,
+    req.body.idEmpleado,
+    req.body.horaIngreso,
+    req.body.horaInicioAlmuerzo,
+    req.body.horaFinAlmuerzo,
+    req.body.horaSalida,
+    req.body.idEstacionDeTrabajo
+  );
   try {
     const info = await empleadoController.registrarTareoComun(
       req.body.fecha,
@@ -272,15 +272,15 @@ router.post("/register/tareo/mina", async (req, res) => {
   }
 });
 
-router.get("/register/horaextra" , async (req, res) => {
-try {
+router.get("/register/horaextra", async (req, res) => {
+  try {
     //	YYYY-MM-DD
     const info = await empleadoController.registrarHoraExtra(
+      req.body.linkDocumento,
       req.body.idEmpleado,
       req.body.Fecha,
       req.body.Cantidad25,
-      req.body.Cantidad35,
-      req.body.linkDocumento
+      req.body.Cantidad35
     );
     res.setHeader("Content-Type", "application/json");
     if (info.status == null || info.status == "error" || info.id == null) {
@@ -294,8 +294,8 @@ try {
   } catch (error) {
     console.log("Ruta Error: ", error);
     return { status: res.status(501), id: null };
- } }
-);
+  }
+});
 
 router.post("/register/licenciacongoce", async (req, res) => {
   try {
@@ -440,6 +440,5 @@ router.post("/register/tareo/descansotrabajado", async (req, res) => {
     return { status: res.status(501), id: null };
   }
 });
-
 
 module.exports = router;

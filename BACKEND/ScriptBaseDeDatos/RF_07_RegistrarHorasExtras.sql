@@ -54,9 +54,9 @@ BEGIN
 END//
 DELIMITER ;
 
-CALL RegistrarHorasExtra("qertyuio" , 21 ,"2023-01-24",2,2);
+#CALL RegistrarHorasExtra("qertyuio" , 21 ,"2023-01-24",2,2);
 
-
+#CALL RegistrarHorasExtra(11,'2023-01-23',2,1,'asdfghjkl');
 
 
 USE jpnet;
