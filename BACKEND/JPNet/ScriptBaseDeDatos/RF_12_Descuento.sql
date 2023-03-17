@@ -28,7 +28,7 @@ BEGIN
 END//
 DELIMITER ;
 
-CALL RegistrarDescuentos(2,2,5.33,0,NULL,'296.00');
+CALL RegistrarDescuentos(2,2,5.33,0,0,'296.00');
 CALL ObtenerTardanzasPorDNI("72234614",'2023-01-16','2023-02-15');
 
 

@@ -1,15 +1,15 @@
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerUsuarios;
 CREATE PROCEDURE ObtenerUsuarios()
 BEGIN
-	SELECT * FROM jpnet.login;
+	SELECT * FROM jpingenieria_jpnet2023.login;
 END//
  DELIMITER ;
  
  CALL ObtenerUsuarios();
 
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DROP PROCEDURE IF EXISTS CrearUsuario;
 DELIMITER //
 CREATE PROCEDURE CrearUsuario(IN Email_IN VARCHAR(100),IN PassWord_IN VARCHAR(100), IN PersonaID_IN INT)
@@ -22,7 +22,7 @@ END //
  
  
  
- USE jpnet;
+ USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerUsuario;
 CREATE PROCEDURE ObtenerUsuario(IN Email_IN VARCHAR(100))

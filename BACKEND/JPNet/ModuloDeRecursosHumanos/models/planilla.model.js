@@ -61,7 +61,13 @@ class PlanillaModel {
                 DNI,Fecha_Inicio,Fecha_Fin
             ]
           );
-          return {id: data[0][0]} ;
+          console.log(data[0][0]);
+          if ((data[0][0]).length == 0) {
+            return {id:[ { idPeriodo: 0, SueldoBruto: 0, EsSalud: 0 } ]}
+          } else {
+            return {id: data[0][0]} ;
+          }
+          
         } catch (error) {
           console.log(error);
           return { status: "error" };
@@ -112,6 +118,23 @@ class PlanillaModel {
             ]
           );
           return { status: "ok", id: data[0] };
+        } catch (error) {
+          console.log(error);
+          return { status: "error" };
+        }
+      }
+
+
+      async ObtenerConsolidadoDeDatosDelTareo(idContrato_IN,Fecha_Inicio,Fecha_Fin ) {
+        try {
+          const con = connectionDb.promise();
+          const data = await con.query(
+            "CALL ObtenerConsolidadoDeDatosDelTareo(?,?,?)",
+            [
+              idContrato_IN,Fecha_Inicio,Fecha_Fin
+            ]
+          );
+          return { status: "ok", id: data[0] } ;
         } catch (error) {
           console.log(error);
           return { status: "error" };

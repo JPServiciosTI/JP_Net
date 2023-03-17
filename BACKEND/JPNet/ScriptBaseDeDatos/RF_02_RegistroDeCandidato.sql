@@ -1,5 +1,5 @@
 #### CREAR DIRECCION
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS CrearDireccion;
 CREATE PROCEDURE CrearDireccion(IN idTipoDeVia_IN INT,IN NombreDeVia_IN VARCHAR(45),IN idTipoDeLocalidad_IN INT,IN NombreLocalidad_IN VARCHAR(45))
@@ -11,12 +11,12 @@ END//
 
 
 #### PARA OBTENER EL ID DE UNA PERSONA ESPECIFICA 
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerDireccion;
 CREATE PROCEDURE ObtenerDireccion(IN idDireccion_IN INT)
 BEGIN
-	 SELECT * FROM jpnet.direccion DI INNER JOIN jpnet.tipodelocalidad TLO ON DI.idTipoDeLocalidad=TLO.idTipoDeLocalidad INNER JOIN jpnet.tipodevia TLV ON DI.idTipoDeVia=TLV.idTipoDeVia WHERE DI.idDireccion = idDireccion_IN;
+	 SELECT * FROM jpingenieria_jpnet2023.direccion DI INNER JOIN jpingenieria_jpnet2023.tipodelocalidad TLO ON DI.idTipoDeLocalidad=TLO.idTipoDeLocalidad INNER JOIN jpingenieria_jpnet2023.tipodevia TLV ON DI.idTipoDeVia=TLV.idTipoDeVia WHERE DI.idDireccion = idDireccion_IN;
 END//
  DELIMITER ;
 #CALL ObtenerDireccion(1);
@@ -24,12 +24,12 @@ END//
 
 
 #### PARA OBTENER LA ULTIMA DIRECCION COMPLETA
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerUltimaDireccion;
 CREATE PROCEDURE ObtenerUltimaDireccion()
 BEGIN
-	SELECT * FROM jpnet.direccion DI INNER JOIN jpnet.tipodelocalidad TLO ON DI.idTipoDeLocalidad=TLO.idTipoDeLocalidad INNER JOIN jpnet.tipodevia TLV ON DI.idTipoDeVia=TLV.idTipoDeVia  ORDER BY idDireccion DESC LIMIT 1 ;
+	SELECT * FROM jpingenieria_jpnet2023.direccion DI INNER JOIN jpingenieria_jpnet2023.tipodelocalidad TLO ON DI.idTipoDeLocalidad=TLO.idTipoDeLocalidad INNER JOIN jpingenieria_jpnet2023.tipodevia TLV ON DI.idTipoDeVia=TLV.idTipoDeVia  ORDER BY idDireccion DESC LIMIT 1 ;
 END//
  DELIMITER ; 
 #CALL ObtenerUltimaDireccion();
@@ -37,7 +37,7 @@ END//
 
  
 #### PARA OBTENER EL ID DE LA LOCALIDAD SEGUN EL UBIGEO
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerLocalidad;
 CREATE PROCEDURE ObtenerLocalidad(IN ubigeo_IN VARCHAR(6))
@@ -49,7 +49,7 @@ END//
  
  
 #### CREAR UN PERFIL DE PERSONA 
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS CrearPersona;
 CREATE PROCEDURE CrearPersona(IN NOMBRE_IN VARCHAR(45),IN APELLIDO_PATERNO_IN VARCHAR(45),IN APELLIDO_MATERNO_IN VARCHAR(45),IN DNI_IN VARCHAR(10),IN TELEFONO_IN VARCHAR(12),
@@ -68,7 +68,7 @@ END//
 
  
 #### PARA OBTENER EL ID DE UNA PERSONA ESPECIFICA 
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerPersona;
 CREATE PROCEDURE ObtenerPersona(IN DNI_IN INT)
@@ -82,7 +82,7 @@ END//
  
  
 #### CREAR UN NUEVO CANDIDATO CON LOS PROCEDIMIENTOS ANTERIORES
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS CrearCandidatoNuevo;
 CREATE PROCEDURE CrearCandidatoNuevo(IN NOMBRE_IN VARCHAR(45),IN APELLIDO_PATERNO_IN VARCHAR(45),IN APELLIDO_MATERNO_IN VARCHAR(45),IN DNI_IN VARCHAR(10),IN TELEFONO_IN VARCHAR(12),IN EMAIL_IN VARCHAR(100),IN SALARIO_IN FLOAT,IN CARGO_IN INT, IN NMESES INT , IN LINK_CV_IN VARCHAR(500))
@@ -102,12 +102,12 @@ END//
 
 
 #### CREAR UN NUEVO CANDIDATO CON LOS PROCEDIMIENTOS ANTERIORES
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerCandidatos;
 CREATE PROCEDURE ObtenerCandidatos(IN REG_INICIO INT, IN CANTIDAD_IN INT)
 BEGIN
-	SELECT CN.idCandidato,PO.DNI,CN.idPersona,PO.Nombres, PO.ApellidoPaterno, PO.ApellidoMaterno, CAR.NombreCargo ,CN.PretencionSalaria,CN.EtapaPrevia,CN.EtapaDeLlamada,CN.EtapaDeEntrevista,CN.EtapaDeContratacion, CN.LinkCurriculum FROM jpnet.candidato CN INNER JOIN jpnet.persona PO on CN.idPersona = PO.idPersona INNER JOIN jpnet.cargo CAR ON CN.idCargoAOptar = CAR.idCargo WHERE CN.idCandidato >= REG_INICIO LIMIT CANTIDAD_IN;
+	SELECT CN.idCandidato,PO.DNI,CN.idPersona,PO.Nombres, PO.ApellidoPaterno, PO.ApellidoMaterno, CAR.NombreCargo ,CN.PretencionSalaria,CN.EtapaPrevia,CN.EtapaDeLlamada,CN.EtapaDeEntrevista,CN.EtapaDeContratacion, CN.LinkCurriculum FROM jpingenieria_jpnet2023.candidato CN INNER JOIN jpingenieria_jpnet2023.persona PO on CN.idPersona = PO.idPersona INNER JOIN jpingenieria_jpnet2023.cargo CAR ON CN.idCargoAOptar = CAR.idCargo WHERE CN.idCandidato >= REG_INICIO LIMIT CANTIDAD_IN;
 END//
  DELIMITER ;
  
@@ -119,7 +119,7 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerCandidato;
 CREATE PROCEDURE ObtenerCandidato(IN idCandidato_IN INT)
 BEGIN
-	SELECT * FROM jpnet.candidato CN INNER JOIN jpnet.persona PO on CN.idPersona = PO.idPersona INNER JOIN jpnet.cargo CAR ON CN.idCargoAOptar = CAR.idCargo WHERE CN.idCandidato = idCandidato_IN ;
+	SELECT * FROM jpingenieria_jpnet2023.candidato CN INNER JOIN jpingenieria_jpnet2023.persona PO on CN.idPersona = PO.idPersona INNER JOIN jpingenieria_jpnet2023.cargo CAR ON CN.idCargoAOptar = CAR.idCargo WHERE CN.idCandidato = idCandidato_IN ;
 END//
  DELIMITER ;
  
@@ -127,22 +127,22 @@ CALL ObtenerCandidato(4);
 CALL ObtenerCandidatos(0,5);
 
 
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS EliminarCandidato;
 CREATE PROCEDURE EliminarCandidato(IN REG_IN INT)
 BEGIN
-	DELETE FROM jpnet.candidato CN WHERE CN.idCandidato = REG_IN;
+	DELETE FROM jpingenieria_jpnet2023.candidato CN WHERE CN.idCandidato = REG_IN;
 END//
  DELIMITER ;
  
  
- USE jpnet;
+ USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ActualizarCandidato;
 CREATE PROCEDURE ActualizarCandidato(IN IDCandidato_IN INT,IN EtapaPrevia_IN INT,IN EtapaDeLlamada_IN INT,IN EtapaEntrevista_IN INT,IN EtapaDeContratacion_IN INT)
 BEGIN
-	UPDATE jpnet.candidato CAND SET 
+	UPDATE jpingenieria_jpnet2023.candidato CAND SET 
     CAND.EtapaPrevia = EtapaPrevia_IN,
     CAND.EtapaDeLlamada = EtapaDeLlamada_IN,
     CAND.EtapaDeEntrevista = EtapaEntrevista_IN,
@@ -154,12 +154,12 @@ END//
  CALL ActualizarCandidato(70345678, 1, 1, 1, 1);
  
  
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerCargos;
 CREATE PROCEDURE ObtenerCargos()
 BEGIN
-	SELECT * FROM jpnet.cargo;
+	SELECT * FROM jpingenieria_jpnet2023.cargo;
 END//
  DELIMITER ;
  

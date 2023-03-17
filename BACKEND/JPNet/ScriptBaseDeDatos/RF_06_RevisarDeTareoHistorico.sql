@@ -1,4 +1,4 @@
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS VerTareadoHistoricoTrabajadorActivo;
 CREATE PROCEDURE VerTareadoHistoricoTrabajadorActivo(IN FECHA_IN DATE, IN FechaFIN DATE, IN idEmpleado_IN INT)
@@ -10,7 +10,7 @@ END//
 DELIMITER ;
 CALL VerTareadoHistoricoTrabajadorActivo('2023-01-16','2023-02-15',1);
 
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS VerTareadoHistoricoTrabajadorCesado;
 CREATE PROCEDURE VerTareadoHistoricoTrabajadorCesado(IN FECHA_IN DATE, IN FechaFIN DATE, IN idEmpleado_IN INT)
@@ -25,7 +25,7 @@ UPDATE tareo SET HoraDeIngreso='7:30:00', HoraDeInicioDeAlmuerzo='13:06:00',Hora
 
 
 
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS VerTareadoHistoricoTrabajadorCalculadoEnMinutos;
 CREATE PROCEDURE VerTareadoHistoricoTrabajadorCalculadoEnMinutos(IN FECHA_IN DATE, IN FechaFIN DATE, IN idEmpleado_IN INT)

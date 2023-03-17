@@ -1,25 +1,25 @@
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerDatosPeriodo;
 CREATE PROCEDURE ObtenerDatosPeriodo()
 BEGIN
-	SELECT * FROM jpnet.periodo;
+	SELECT * FROM jpingenieria_jpnet2023.periodo;
 END//
  DELIMITER ;
 
 
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerEmpleadosParaPlanilla;
 CREATE PROCEDURE ObtenerEmpleadosParaPlanilla(IN REG_INICIO INT, IN CANTIDAD_IN INT)
 BEGIN
-	SELECT * FROM jpnet.empleado CN INNER JOIN  jpnet.persona PO ON CN.idPersona = PO.idPersona INNER JOIN jpnet.cargo CG ON CG.idCargo = CN.idCargo   INNER JOIN jpnet.contrato CT ON CT.idEmpleado = CN.idEmpleado INNER JOIN jpnet.datoscontables DC ON DC.idContrato = CT.idContrato WHERE CN.idEmpleado >= REG_INICIO AND CT.idCondicionDeContrato = 1 LIMIT CANTIDAD_IN;
+	SELECT * FROM empleado CN INNER JOIN  persona PO ON CN.idPersona = PO.idPersona INNER JOIN cargo CG ON CG.idCargo = CN.idCargo   INNER JOIN contrato CT ON CT.idEmpleado = CN.idEmpleado INNER JOIN datoscontables DC ON DC.idContrato = CT.idContrato WHERE CN.idEmpleado >= REG_INICIO AND CT.idCondicionDeContrato = 1 LIMIT CANTIDAD_IN;
 END//
  DELIMITER ;
  CALL ObtenerEmpleadosParaPlanilla(0,100);
  
  
- USE jpnet;
+ USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS CrearPagoDelTareo;
 CREATE PROCEDURE CrearPagoDelTareo(IN IDTAREO_IN INT,  IN CANTIDAD_PAGO_IN FLOAT, IDPERIODO_IN INT)
@@ -47,7 +47,7 @@ CALL CrearPagoDelTareo(38,48.38709677419355,2);
 INSERT INTO pagotareo(idTareo,CantidadDePago,idPeriodo) VALUES (38,48.38709677419355,2);
 
 
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS CalcularRemuneracionBruta;
 CREATE PROCEDURE CalcularRemuneracionBruta(IN DNI_IN VARCHAR(10), IN FINICIO_IN DATE,IN FECHAFIN_IN DATE )
@@ -56,15 +56,15 @@ BEGIN
     DECLARE IDContrato INT;
 	SET IDEmpleado = (SELECT EMP.idEmpleado FROM jpingenieria_jpnet2023.empleado EMP INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN); 
 	SET IDContrato = (SELECT CT.idContrato FROM jpingenieria_jpnet2023.contrato CT INNER JOIN jpingenieria_jpnet2023.empleado EMP ON CT.idEmpleado = EMP.idEmpleado INNER JOIN persona PRS ON EMP.idPersona = PRS.idPersona WHERE PRS.DNI = DNI_IN AND CT.idCondicionDeContrato =1);
-	SELECT PG.idPeriodo,ROUND(SUM(PG.CantidadDePago), 2)AS SueldoBruto, ROUND(SUM(PG.CantidadDePago), 2)*0.09 AS EsSalud FROM jpingenieria_jpnet2023.pagotareo PG INNER JOIN jpingenieria_jpnet2023.tareo TAR ON PG.idTareo = TAR.idTareo WHERE TAR.Fecha >= FINICIO_IN AND FECHAFIN_IN >= TAR.Fecha AND TAR.idContrato = IDContrato GROUP BY PG.idPeriodo;
+	SELECT PG.idPeriodo,ROUND(SUM(PG.CantidadDePago), 2)AS SueldoBruto, ROUND(SUM(PG.CantidadDePago), 2)*0.09 AS EsSalud FROM jpingenieria_jpnet2023.pagotareo PG INNER JOIN jpingenieria_jpnet2023.tareo TAR ON PG.idTareo = TAR.idTareo WHERE TAR.Fecha >= FINICIO_IN AND FECHAFIN_IN >= TAR.Fecha AND TAR.idContrato = IDContrato AND (TAR.idCondicionDeTareo = 1 OR TAR.idCondicionDeTareo = 2)  GROUP BY PG.idPeriodo;
 END//
 DELIMITER ;
 
 SELECT ROUND(SUM(PG.CantidadDePago), 2)AS SueldoBruto, ROUND(SUM(PG.CantidadDePago), 2)*0.09 AS EsSalud FROM jpingenieria_jpnet2023.pagotareo PG INNER JOIN jpingenieria_jpnet2023.tareo TAR ON PG.idTareo = TAR.idTareo WHERE TAR.Fecha >= '2023-01-16' AND '2023-02-15' >= TAR.Fecha AND TAR.idContrato = 17;
 
-CALL CalcularRemuneracionBruta("47266814",'2023-01-16','2023-02-15');
+CALL CalcularRemuneracionBruta("72234614",'2023-01-16','2023-02-15');
 
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerTareos;
 CREATE PROCEDURE ObtenerTareos(IN DNI_IN VARCHAR(10), IN FINICIO_IN DATE,IN FECHAFIN_IN DATE )
@@ -80,7 +80,7 @@ DELIMITER ;
 CALL ObtenerTareos("74958535",'2023-01-16','2023-02-15');
 
 
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerPlanillaEmpleados;
 CREATE PROCEDURE ObtenerPlanillaEmpleados( IN FINICIO_IN DATE,IN FECHAFIN_IN DATE )
@@ -95,7 +95,7 @@ SET IDDatosContables = (SELECT DC.idDatosContables FROM jpnet.datoscontables DC 
 
 
        
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ObtenerPlanilla;
 CREATE PROCEDURE ObtenerPlanilla( IN FINICIO_IN DATE,IN FECHAFIN_IN DATE )
@@ -153,3 +153,54 @@ BEGIN
 END//
 DELIMITER ;
 CALL ReiniciarPlanillaDelPeriodo(2);
+
+CALL CalcularRemuneracionBruta(22,"2023-01-16","2023-02-15");
+#Dias pendientes de pago	
+#Descanso Médico		
+#DCGH		
+#VACACIONES		
+#FERIADOS TRABAJADOS		
+#DESCANSOS TRABAJADOS		
+#Asig. Fam	Bonos y Otros Conceptos	
+#COMPENSACION VACACIONAL		
+#HORAS EXTRAS		
+#MMG 	MCP	MCB	AQP	PRY
+
+USE jpingenieria_jpnet2023;
+DELIMITER //
+DROP PROCEDURE IF EXISTS ObtenerConsolidadoDeDatosDelTareo;
+CREATE PROCEDURE ObtenerConsolidadoDeDatosDelTareo(IN idContrato_IN INT, IN FechaDeInicio_IN DATE, IN FechaDeFin_IN DATE)
+BEGIN
+	DECLARE MMG_C FLOAT;
+    DECLARE MCP_C FLOAT;
+    DECLARE MCB_C FLOAT;
+    DECLARE AQP_C FLOAT;
+    DECLARE PRY_C FLOAT;
+	DECLARE DESCANSOMedico_C INT;
+    DECLARE DCGH_C INT;
+    DECLARE FERIADO_TRABAJOS_C INT;
+    DECLARE DESCANSOS_TRABAJADOS_C INT;
+    DECLARE Hora35_C FLOAT;
+    DECLARE Hora25_C FLOAT;
+    DECLARE DESCANSOS_C FLOAT;
+    DECLARE VACACIONES_C FLOAT;
+	SET MMG_C = (SELECT count(idTareo) FROM tareo TRA  WHERE  idContrato = idContrato_IN AND TRA.idEstacionDeTrabajo = 4 AND (TRA.idCondicionDeTareo = 1 OR TRA.idCondicionDeTareo = 10)  AND FechaDeInicio_IN<=TRA.Fecha AND TRA.Fecha <= FechaDeFin_IN);
+	SET MCP_C = (SELECT count(idTareo) FROM tareo TRA  WHERE  idContrato = idContrato_IN AND TRA.idEstacionDeTrabajo = 6 AND (TRA.idCondicionDeTareo = 1 OR TRA.idCondicionDeTareo = 10)  AND FechaDeInicio_IN<=TRA.Fecha AND TRA.Fecha <= FechaDeFin_IN);
+	SET MCB_C = (SELECT count(idTareo) FROM tareo TRA  WHERE  idContrato = idContrato_IN AND TRA.idEstacionDeTrabajo = 7 AND (TRA.idCondicionDeTareo = 1 OR TRA.idCondicionDeTareo = 10)  AND FechaDeInicio_IN<=TRA.Fecha AND TRA.Fecha <= FechaDeFin_IN);
+	SET AQP_C = (SELECT count(idTareo) FROM tareo TRA  WHERE  idContrato = idContrato_IN AND (TRA.idEstacionDeTrabajo = 1 OR TRA.idEstacionDeTrabajo = 2 ) AND (TRA.idCondicionDeTareo = 1 OR TRA.idCondicionDeTareo = 2)  AND FechaDeInicio_IN<=TRA.Fecha AND TRA.Fecha <= FechaDeFin_IN);
+	SET PRY_C = (SELECT count(idTareo) FROM tareo TRA  WHERE  idContrato = idContrato_IN AND (TRA.idEstacionDeTrabajo = 8 OR TRA.idEstacionDeTrabajo = 9 OR TRA.idEstacionDeTrabajo = 3) AND (TRA.idCondicionDeTareo = 1 OR TRA.idCondicionDeTareo = 2)  AND FechaDeInicio_IN<=TRA.Fecha AND TRA.Fecha <= FechaDeFin_IN);
+	SET DESCANSOMedico_C = (SELECT count(idTareo) FROM tareo TRA WHERE  TRA.idCondicionDeTareo = 4 AND TRA.idContrato = idContrato_IN AND FechaDeInicio_IN<=TRA.Fecha AND TRA.Fecha <= FechaDeFin_IN);
+    SET DESCANSOS_C = (SELECT count(idTareo) FROM tareo TRA WHERE  TRA.idCondicionDeTareo = 7 AND TRA.idContrato = idContrato_IN AND FechaDeInicio_IN<=TRA.Fecha AND TRA.Fecha <= FechaDeFin_IN);
+    SET FERIADO_TRABAJOS_C = (SELECT count(idTareo) FROM tareo TRA WHERE  TRA.idCondicionDeTareo = 8 AND TRA.idContrato = idContrato_IN AND FechaDeInicio_IN<=TRA.Fecha AND TRA.Fecha <= FechaDeFin_IN);
+    SET VACACIONES_C = (SELECT count(idTareo) FROM tareo TRA WHERE  TRA.idCondicionDeTareo = 9 AND TRA.idContrato = idContrato_IN AND FechaDeInicio_IN<=TRA.Fecha AND TRA.Fecha <= FechaDeFin_IN);
+	SET DCGH_C = (SELECT count(idTareo) FROM tareo TRA WHERE  TRA.idCondicionDeTareo = 6 AND TRA.idContrato = idContrato_IN AND FechaDeInicio_IN<=TRA.Fecha AND TRA.Fecha <= FechaDeFin_IN);
+	SET Hora25_C = (SELECT SUM(HES.ValorDe25) FROM tareo TRA INNER JOIN horasextras HES ON TRA.idHorasExtras = HES.idHorasExtras AND TRA.idContrato = idContrato_IN AND FechaDeInicio_IN<=TRA.Fecha AND TRA.Fecha <= FechaDeFin_IN);
+    SET Hora35_C = (SELECT SUM(HES.ValorDe35) FROM tareo TRA INNER JOIN horasextras HES ON TRA.idHorasExtras = HES.idHorasExtras AND TRA.idContrato = idContrato_IN AND FechaDeInicio_IN<=TRA.Fecha AND TRA.Fecha <= FechaDeFin_IN);
+    SELECT MMG_C AS "MMG", MCP_C AS "MCP", MCB_C AS "MCB",AQP_C AS "AQP",PRY_C AS "PRY", DCGH_C AS "DCGH", DESCANSOMedico_C AS "MEDICO", DESCANSOS_C AS "DESCANSOSPROGRAMADOS", FERIADO_TRABAJOS_C AS "FERIADOSTRABAJADOS", VACACIONES_C AS "VACACIONES", Hora25_C AS "H25",Hora35_C AS "H35";
+END//
+DELIMITER ;
+CALL ObtenerConsolidadoDeDatosDelTareo(11,"2023-01-16","2023-02-15");
+
+
+
+SELECT SUM(HES.ValorDe25) FROM tareo TRA INNER JOIN horasextras HES ON TRA.idHorasExtras = HES.idHorasExtras AND TRA.idContrato = idContrato_IN AND FechaDeInicio_IN<=TRA.Fecha AND TRA.Fecha <= FechaDeFin_IN;

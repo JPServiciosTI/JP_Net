@@ -1,4 +1,4 @@
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS RegistrarLicenciasSinGoceDeHaber;
 CREATE PROCEDURE RegistrarLicenciasSinGoceDeHaber(
@@ -25,7 +25,7 @@ BEGIN
     
 	START TRANSACTION;
 		SET ID_Contrato = (SELECT idContrato FROM contrato  WHERE idEmpleado = idEmpleado_IN AND idCondicionDeContrato = 1);
-		INSERT INTO jpnet.licenciasingocedehaber(FechaDeInicioSinGoceDeHaber,
+		INSERT INTO jpingenieria_jpnet2023.licenciasingocedehaber(FechaDeInicioSinGoceDeHaber,
         FechasDeFinSinGoceDeHaber,
         DiasHabilesAConsiderar,
         LinkDelDocumento

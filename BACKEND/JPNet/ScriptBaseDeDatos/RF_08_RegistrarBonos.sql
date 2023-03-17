@@ -1,4 +1,4 @@
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS RegistrarBonos;
 CREATE PROCEDURE RegistrarBonos(IN PagoHorasExtras_IN FLOAT,IN Reintegro_IN FLOAT,IN BonoDeclarado_IN FLOAT,IN BonoProduce_IN FLOAT,IN BonoNoche_IN FLOAT,IN BonoRotacion FLOAT, IN BonoAsignacionFamiliar FLOAT)
@@ -18,7 +18,7 @@ BEGIN
 	END;
     
 	START TRANSACTION;
-		INSERT INTO jpnet.bonos(PagoHorasExtras,Reintegro, BonoDeclarado, BonoProduce, BonoConductor, BonoRotacion, BonoAsignacionFamiliar) VALUES (PagoHorasExtras_IN,Reintegro_IN,BonoDeclarado_IN,BonoProduce_IN,BonoNoche_IN,BonoRotacion,BonoAsignacionFamiliar);
+		INSERT INTO jpingenieria_jpnet2023.bonos(PagoHorasExtras,Reintegro, BonoDeclarado, BonoProduce, BonoConductor, BonoRotacion, BonoAsignacionFamiliar) VALUES (PagoHorasExtras_IN,Reintegro_IN,BonoDeclarado_IN,BonoProduce_IN,BonoNoche_IN,BonoRotacion,BonoAsignacionFamiliar);
         COMMIT;
 
 END//
@@ -27,4 +27,4 @@ DELIMITER ;
 
 
 
-SELECT * FROM jpnet.bonos;
+SELECT * FROM jpingenieria_jpnet2023.bonos;

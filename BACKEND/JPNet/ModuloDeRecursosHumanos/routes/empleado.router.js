@@ -272,7 +272,7 @@ router.post("/register/tareo/mina", async (req, res) => {
   }
 });
 
-router.get("/register/horaextra", async (req, res) => {
+router.post("/register/horaextra", async (req, res) => {
   try {
     //	YYYY-MM-DD
     const info = await empleadoController.registrarHoraExtra(

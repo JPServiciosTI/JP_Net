@@ -1,4 +1,4 @@
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS ActualizarTareo;
 CREATE PROCEDURE ActualizarTareo(IN HoraDeIngreso_IN TIME, IN HoraDeInicioDeAlmuerzo_IN TIME, IN HoraDeFinDeAlmuerzo_IN TIME,IN HoraDeSalida_IN TIME,IN idEstacionDeTrabajo_IN INT ,IN idTareo_IN INT)

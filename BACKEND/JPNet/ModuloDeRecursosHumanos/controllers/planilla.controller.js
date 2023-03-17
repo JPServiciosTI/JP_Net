@@ -18,8 +18,8 @@ const tareoDb = new TareoModel();
 const EmpleadoModel = require("../models/empleado.model");
 const empleadoDb = new EmpleadoModel();
 
-//const DescuentoModel = require("../models/descuentos.model");
-//const descuentoDb = new DescuentoModel();
+const DescuentoModel = require("../models/descuentos.model");
+const descuentoDb = new DescuentoModel();
 
 class PlanillaController {
   async CalcularPagosATrabajadores(FechaInicio, FechaFin, PeriodoIN) {
@@ -196,6 +196,7 @@ class PlanillaController {
 
   async obtenerSueldoBruto(DNI, FechaInicio, FechaFin) {
     try {
+      console.log(DNI);
       const result = planillaDb.CalcularSueldoBruto(DNI, FechaInicio, FechaFin);
       const data = await result.catch((err) => {
         console.log("Controller Error: ", err);
@@ -207,7 +208,7 @@ class PlanillaController {
       return { status: "error", id: null };
     }
   }
-  /*
+
   async obtenerDescuentos(idContrato, Periodo) {
     try {
       const result = descuentoDb.getDescuentos(idContrato, Periodo);
@@ -221,7 +222,7 @@ class PlanillaController {
       return { status: "error", id: null };
     }
   }
-*/
+
   async calcularImpuestoQuintaCategoria(remuneracionMensual) {
     const UIT = 4600; // Unidad Impositiva Tributaria
     let MontoSupuesto = remuneracionMensual * 12;
@@ -257,8 +258,23 @@ class PlanillaController {
     return impuestoRedondeado;
   }
 
-  async obtenerPreGeneradoDePlanilla(FechaInicio, FechaFin) {
+  async calcularHorasExtras(HorasDe25, HorasDe35, Sueldo) {
+    let calculoHoraDelEmpleado = Sueldo / 30 / 8;
+    let CalculoHoras25 = calculoHoraDelEmpleado * 1.25 * HorasDe25;
+    let CalculoHoras35 = calculoHoraDelEmpleado * 1.35 * HorasDe35;
+    console.log("CostoPorHoraRegular:", calculoHoraDelEmpleado);
+    console.log("CostoTotalHoras25:", CalculoHoras25);
+    console.log("CostoTotalHoras35:", CalculoHoras35);
+    console.log("Total:", CalculoHoras25 + CalculoHoras35);
+    return (CalculoHoras25 + CalculoHoras35).toFixed(2);
+  }
+
+  async obtenerPreGeneradoDePlanilla(FechaInicio, FechaFin, Periodo_IN) {
     const SueldoMinimoVial = 1025;
+    let fecha1 = new Date(FechaInicio);
+    let fecha2 = new Date(FechaFin);
+    let diferencia = fecha2.getTime() - fecha1.getTime();
+    let diasDeDiferencia = diferencia / 1000 / 60 / 60 / 24;
     try {
       const result = planillaDb.ObtenerPersonalParaPlanilla(
         FechaInicio,
@@ -302,37 +318,129 @@ class PlanillaController {
 
         console.log("Faltas> ", dataFaltas["id"][0].Faltas);
         data["id"][0][i].Faltas = dataFaltas["id"][0].Faltas;
-        console.log("Faltas> ", data["id"][0][i].Faltas);
+        // console.log("Faltas> ", data["id"][0][i].Faltas);
         data["id"][0][i].Tardanza = dataTardanza["id"][0].Tardanzas || 0;
-        data["id"][0][i].Periodo = data3["id"][0].idPeriodo || 0;
-
-        if (data["id"][0][i].SueldoBase <= data3["id"][0].SueldoBruto) {
+        //console.log("Que fue del periodo:? ", DNI_IN, data3["id"][0]);
+        data["id"][0][i].Periodo = Periodo_IN || 0;
+        console.log("DNI", DNI_IN, "Sueldo: ", data3["id"][0].SueldoBruto);
+        if (data["id"][0][i].SueldoBase <= (data3["id"][0].SueldoBruto || 0)) {
           data["id"][0][i].SueldoTareado = data["id"][0][i].SueldoBase;
         } else {
-          data["id"][0][i].SueldoTareado = data3["id"][0].SueldoBruto;
+          data["id"][0][i].SueldoTareado = data3["id"][0].SueldoBruto || 0;
         }
-        data["id"][0][i].EsSalud = data3["id"][0].EsSalud;
-        data["id"][0][i].EsSalud = parseFloat(data["id"][0][i].EsSalud).toFixed(
-          2
-        );
+
+        const resultTotalDeCompensacionesAdicionales =
+          planillaDb.ObtenerConsolidadoDeDatosDelTareo(
+            data["id"][0][i].idContrato,
+            FechaInicio,
+            FechaFin
+          );
+        const dataTotalDeCompensacionesAdicionales =
+          await resultTotalDeCompensacionesAdicionales.catch((err) => {
+            console.log("Controller Data Tardanza Error: ", err);
+            return { status: "error", id: null };
+          });
+        let SueldoPorDia = data["id"][0][i].SueldoBase / diasDeDiferencia;
+        //console.log(dataTotalDeCompensacionesAdicionales["id"][0])
+        data["id"][0][i].MMG =
+          dataTotalDeCompensacionesAdicionales["id"][0][0].MMG * SueldoPorDia ||
+          0;
+        data["id"][0][i].MCP =
+          dataTotalDeCompensacionesAdicionales["id"][0][0].MCP * SueldoPorDia ||
+          0;
+        data["id"][0][i].MCB =
+          dataTotalDeCompensacionesAdicionales["id"][0][0].MCB * SueldoPorDia ||
+          0;
+        data["id"][0][i].PRY =
+          dataTotalDeCompensacionesAdicionales["id"][0][0].PRY * SueldoPorDia ||
+          0;
+        data["id"][0][i].DCGH =
+          dataTotalDeCompensacionesAdicionales["id"][0][0].DCGH *
+            SueldoPorDia || 0;
+        data["id"][0][i].DescansosMedicos =
+          dataTotalDeCompensacionesAdicionales["id"][0][0].MEDICO *
+            SueldoPorDia || 0;
+        data["id"][0][i].DescansosProgramados =
+          dataTotalDeCompensacionesAdicionales["id"][0][0]
+            .DESCANSOSPROGRAMADOS * SueldoPorDia || 0;
+        data["id"][0][i].FeriadosTrabajados =
+          dataTotalDeCompensacionesAdicionales["id"][0][0].FERIADOSTRABAJADOS *
+            SueldoPorDia *
+            2 || 0;
+        data["id"][0][i].Vacaciones =
+          dataTotalDeCompensacionesAdicionales["id"][0][0].VACACIONES *
+            SueldoPorDia || 0;
+        let SumaTotalDeLosConceptosDelTareo =
+          data["id"][0][i].SueldoTareado +
+          data["id"][0][i].DescansosMedicos +
+          data["id"][0][i].MMG +
+          data["id"][0][i].MCP +
+          data["id"][0][i].MCB +
+          data["id"][0][i].PRY +
+          data["id"][0][i].DCGH +
+          data["id"][0][i].DescansosMedicos +
+          data["id"][0][i].DescansosProgramados +
+          data["id"][0][i].FeriadosTrabajados +
+          data["id"][0][i].Vacaciones;
+          console.log("Que Fue: ",           
+          data["id"][0][i].SueldoTareado +
+          data["id"][0][i].DescansosMedicos ,
+          data["id"][0][i].MMG ,
+          data["id"][0][i].MCP ,
+          data["id"][0][i].MCB ,
+          data["id"][0][i].PRY ,
+          data["id"][0][i].DCGH ,
+          data["id"][0][i].DescansosMedicos ,
+          data["id"][0][i].DescansosProgramados ,
+          data["id"][0][i].FeriadosTrabajados ,
+          data["id"][0][i].Vacaciones)
+          console.log("SumaTotalDeLosConceptosDelTareo: ",SumaTotalDeLosConceptosDelTareo);
+
+        let calculoHoraDelEmpleado = data["id"][0][i].SueldoBase / 30 / 8;
+        let CalculoHoras25 =
+          calculoHoraDelEmpleado *
+          1.25 *
+          (dataTotalDeCompensacionesAdicionales["id"][0][0].H25 || 0);
+        let CalculoHoras35 =
+          calculoHoraDelEmpleado *
+          1.35 *
+          (dataTotalDeCompensacionesAdicionales["id"][0][0].H25 || 0);
+        data["id"][0][i].HorasExtras25 =
+          dataTotalDeCompensacionesAdicionales["id"][0][0].H25 || 0;
+        data["id"][0][i].HorasExtras35 =
+          dataTotalDeCompensacionesAdicionales["id"][0][0].H35 || 0;
+        data["id"][0][i].MontoHorasExtras25 = CalculoHoras25 || 0;
+        data["id"][0][i].MontoHorasExtras35 = CalculoHoras35 || 0;
+        data["id"][0][i].MontoTotalHorasExtras =
+          parseFloat((CalculoHoras25 + CalculoHoras35).toFixed(2)) || 0;
+          if (SumaTotalDeLosConceptosDelTareo > data["id"][0][i].SueldoBase) {
+            SumaTotalDeLosConceptosDelTareo = data["id"][0][i].SueldoBase;
+          }
+          if (data["id"][0][i].NHijos > 0) {
+            data["id"][0][i].AsignacionFamiliar = 102.5;
+          } else {
+            data["id"][0][i].AsignacionFamiliar = 0;
+          }
         if (parseFloat(data["id"][0][i].Asegurable) < SueldoMinimoVial) {
           data["id"][0][i].EsSalud = (SueldoMinimoVial * 0.09).toFixed(2);
         }
-        if (data["id"][0][i].NHijos > 0) {
-          data["id"][0][i].AsignacionFamiliar = 102.5;
-        } else {
-          data["id"][0][i].AsignacionFamiliar = 0;
-        }
+
 
         data["id"][0][i].CompensacionesAdicionales =
           data["id"][0][i].AsignacionFamiliar;
         data["id"][0][i].Asegurable =
-          data["id"][0][i].SueldoTareado + data["id"][0][i].AsignacionFamiliar;
+          SumaTotalDeLosConceptosDelTareo +
+          parseFloat(data["id"][0][i].MontoTotalHorasExtras);
+        console.log("ASEGURARBLE: ", data["id"][0][i].Asegurable);
+        data["id"][0][i].EsSalud = (data["id"][0][i].Asegurable * 0.09).toFixed(
+          2
+        );
+        console.log("ESSALUD: ", data["id"][0][i].EsSalud);
         data["id"][0][i].DescuentoAFP = (
           data["id"][0][i].SueldoTareado *
           data["id"][0][i].PorcentajeDeDescuento
         ).toFixed(2);
-        data;
+
         /**
          * Funcion para el calculo de Quinta Categoria
          */
@@ -383,9 +491,16 @@ class PlanillaController {
         ).toFixed(2);
         data["id"][0][i].NetoTotal =
           data["id"][0][i].Asegurable - data["id"][0][i].TotalDescuentos;
+        console.log(
+          "ASEGF: ",
+          data["id"][0][i].Asegurable,
+          "DESC: ",
+          data["id"][0][i].TotalDescuentos
+        );
         data["id"][0][i].NetoTotal = parseFloat(
           data["id"][0][i].NetoTotal
         ).toFixed(2);
+        console.log("Neto: ", data["id"][0][i].NetoTotal);
         /*
         const resultDescuentos = descuentoDb.createDescuentoDeLey(
           data["id"][0][i].Periodo,
@@ -398,10 +513,9 @@ class PlanillaController {
         const dataDescuentos = await resultDescuentos.catch((err) => {
           console.log("Controller Data Descuento Error: ", err);
           return { status: "error", id: null };
-        });
-      */
+        });*/
       }
-      //console.log("ertyui");
+
       return data;
     } catch (error) {
       console.log("Controller Error: ", error);

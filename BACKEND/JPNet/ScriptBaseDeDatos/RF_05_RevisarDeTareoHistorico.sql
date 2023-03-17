@@ -1,4 +1,4 @@
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS VerTareadoHistoricoTrabajadorActivo;
 CREATE PROCEDURE VerTareadoHistoricoTrabajadorActivo(IN FECHA_IN DATE, IN FechaFIN DATE, IN idEmpleado_IN INT)
@@ -11,7 +11,7 @@ END//
  CALL VerTareadoHistoricoTrabajadorActivo('2023-01-16','2023-02-15',1);
  
  
-USE jpnet;
+USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS VerTareadoHistoricoTrabajadorCesado;
 CREATE PROCEDURE VerTareadoHistoricoTrabajadorCesado(IN FECHA_IN DATE, IN FechaFIN DATE, IN idEmpleado_IN INT)
@@ -25,7 +25,7 @@ END//
  CALL VerTareadoHistoricoTrabajadorCesado('2023-01-16','2023-02-15',1);
  
  
- USE jpnet;
+ USE jpingenieria_jpnet2023;
 DELIMITER //
 DROP PROCEDURE IF EXISTS VerTareadoHistoricoTrabajadorActivo2;
 CREATE PROCEDURE VerTareadoHistoricoTrabajadorActivo2(IN FECHA_IN DATE, IN FechaFIN DATE, IN idEmpleado_IN INT)

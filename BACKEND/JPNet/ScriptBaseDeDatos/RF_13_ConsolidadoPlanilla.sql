@@ -45,6 +45,11 @@ IN TotalNeto_IN varchar(45) ,
 IN EsSalud_IN varchar(45) 
 )
 BEGIN
+	DECLARE idConsolidado INT;
+    SET idConsolidado = (SELECT idplanilla FROM planillaconsolidadada WHERE DNI = DNI_IN  AND Periodo = Periodo_IN);
+    IF idConsolidado > 0 THEN 
+		DELETE FROM planillaconsolidadada WHERE idplanilla = idConsolidado;
+	END IF;
 	INSERT INTO jpingenieria_consolidadodeplanillajpnet.planillaconsolidadada(
 				Periodo ,DNI , ApellidoPaterno ,ApellidoMaterno, Nombres ,RemuneracionBasica ,
 				PRY ,MCP ,MCB ,AQP ,Total , SueldoBruto ,Dias_DCGH , Monto_DCGH ,
