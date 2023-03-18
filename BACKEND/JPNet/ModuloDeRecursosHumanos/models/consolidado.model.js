@@ -7,6 +7,7 @@ class ConsolidadoModel {
     ApellidoMaterno,
     Nombres,
     RemuneracionBasica,
+    MMG,
     PRY,
     MCP,
     MCB,
@@ -46,7 +47,7 @@ class ConsolidadoModel {
     try {
       const con = connectionDb.promise();
       const data = await con.query(
-        "CALL RegistrarConsolidado( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "CALL RegistrarConsolidado( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         [
           Periodo,
           DNI,
@@ -54,6 +55,7 @@ class ConsolidadoModel {
           ApellidoMaterno,
           Nombres,
           RemuneracionBasica,
+          MMG,
           PRY,
           MCP,
           MCB,
@@ -94,7 +96,7 @@ class ConsolidadoModel {
       return { status: "ok", id: data[0] };
     } catch (error) {
       console.log(error);
-      return { status: "error" };
+      return { status: "error", id: null };
     }
   }
 

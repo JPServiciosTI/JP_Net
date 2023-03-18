@@ -49,6 +49,7 @@ router.post("/guardar", async (req, res) => {
   try {
     const info = await consolidadoController.createForArray(req.body.data);
     res.setHeader("Content-Type", "application/json");
+    console.log("Informacion Final ", info);
     if (info.status == null) {
       res.status(502).end(JSON.stringify(info)).json({
         status: "ERROR",

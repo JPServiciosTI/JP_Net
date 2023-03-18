@@ -321,7 +321,7 @@ class PlanillaController {
         // console.log("Faltas> ", data["id"][0][i].Faltas);
         data["id"][0][i].Tardanza = dataTardanza["id"][0].Tardanzas || 0;
         //console.log("Que fue del periodo:? ", DNI_IN, data3["id"][0]);
-        data["id"][0][i].Periodo = Periodo_IN || 0;
+        data["id"][0][i].Periodo = Periodo_IN;
         console.log("DNI", DNI_IN, "Sueldo: ", data3["id"][0].SueldoBruto);
         if (data["id"][0][i].SueldoBase <= (data3["id"][0].SueldoBruto || 0)) {
           data["id"][0][i].SueldoTareado = data["id"][0][i].SueldoBase;
@@ -342,41 +342,39 @@ class PlanillaController {
           });
         let SueldoPorDia = data["id"][0][i].SueldoBase / diasDeDiferencia;
         //console.log(dataTotalDeCompensacionesAdicionales["id"][0])
-        data["id"][0][i].MMG =
-          dataTotalDeCompensacionesAdicionales["id"][0][0].MMG * SueldoPorDia ||
-          0;
-        data["id"][0][i].MCP =
-          dataTotalDeCompensacionesAdicionales["id"][0][0].MCP * SueldoPorDia ||
-          0;
-        data["id"][0][i].MCB =
-          dataTotalDeCompensacionesAdicionales["id"][0][0].MCB * SueldoPorDia ||
-          0;
-        data["id"][0][i].PRY =
-          dataTotalDeCompensacionesAdicionales["id"][0][0].PRY * SueldoPorDia ||
-          0;
-        data["id"][0][i].DCGH =
-          dataTotalDeCompensacionesAdicionales["id"][0][0].DCGH *
-            SueldoPorDia || 0;
-        data["id"][0][i].DescansosMedicos =
-          dataTotalDeCompensacionesAdicionales["id"][0][0].MEDICO *
-            SueldoPorDia || 0;
-        data["id"][0][i].DescansosProgramados =
-          dataTotalDeCompensacionesAdicionales["id"][0][0]
-            .DESCANSOSPROGRAMADOS * SueldoPorDia || 0;
-        data["id"][0][i].FeriadosTrabajados =
-          dataTotalDeCompensacionesAdicionales["id"][0][0].FERIADOSTRABAJADOS *
-            SueldoPorDia *
-            2 || 0;
-        data["id"][0][i].Vacaciones =
-          dataTotalDeCompensacionesAdicionales["id"][0][0].VACACIONES *
-            SueldoPorDia || 0;
-        let SumaTotalDeLosConceptosDelTareo =
+        data["id"][0][i].MMG =  dataTotalDeCompensacionesAdicionales["id"][0][0].MMG * SueldoPorDia ||  0;
+        data["id"][0][i].MMGContado =  dataTotalDeCompensacionesAdicionales["id"][0][0].MMG ||  0;
+        data["id"][0][i].MCP =  dataTotalDeCompensacionesAdicionales["id"][0][0].MCP * SueldoPorDia || 0;
+        data["id"][0][i].MCPContado =  dataTotalDeCompensacionesAdicionales["id"][0][0].MCP || 0;
+        data["id"][0][i].MCB = dataTotalDeCompensacionesAdicionales["id"][0][0].MCB * SueldoPorDia ||      0;
+        data["id"][0][i].MCBContado = dataTotalDeCompensacionesAdicionales["id"][0][0].MCB ||      0;
+        data["id"][0][i].PRY =    dataTotalDeCompensacionesAdicionales["id"][0][0].PRY * SueldoPorDia ||   0;
+        data["id"][0][i].PRYContado =    dataTotalDeCompensacionesAdicionales["id"][0][0].PRY ||   0;
+        data["id"][0][i].AQPContado =    dataTotalDeCompensacionesAdicionales["id"][0][0].AQP ||   0; 
+        data["id"][0][i].DCGH =   dataTotalDeCompensacionesAdicionales["id"][0][0].DCGH *  SueldoPorDia || 0;
+        data["id"][0][i].DCGHContable =   dataTotalDeCompensacionesAdicionales["id"][0][0].DCGH || 0;
+        data["id"][0][i].DescansosMedicos =      dataTotalDeCompensacionesAdicionales["id"][0][0].MEDICO * SueldoPorDia || 0;
+        data["id"][0][i].DescansosMedicosContable =      dataTotalDeCompensacionesAdicionales["id"][0][0].MEDICO || 0;
+        data["id"][0][i].DescansosProgramados =       parseFloat((dataTotalDeCompensacionesAdicionales["id"][0][0].DESCANSOSPROGRAMADOS * SueldoPorDia).toFixed(2))|| 0;
+        data["id"][0][i].DescansosProgramadosContable =       dataTotalDeCompensacionesAdicionales["id"][0][0].DESCANSOSPROGRAMADOS || 0;
+        data["id"][0][i].FeriadosTrabajados =       dataTotalDeCompensacionesAdicionales["id"][0][0].FERIADOSTRABAJADOS *  SueldoPorDia * 2 || 0;
+        data["id"][0][i].FeriadosTrabajadosContable =       dataTotalDeCompensacionesAdicionales["id"][0][0].FERIADOSTRABAJADOS *  SueldoPorDia * 2 || 0;
+        data["id"][0][i].Vacaciones =          dataTotalDeCompensacionesAdicionales["id"][0][0].VACACIONES * SueldoPorDia || 0;
+        data["id"][0][i].VacacionesContable =          dataTotalDeCompensacionesAdicionales["id"][0][0].VACACIONES * SueldoPorDia || 0;
+
+        data["id"][0][i].SueldoBruto = parseFloat(( 
           data["id"][0][i].SueldoTareado +
-          data["id"][0][i].DescansosMedicos +
           data["id"][0][i].MMG +
           data["id"][0][i].MCP +
           data["id"][0][i].MCB +
-          data["id"][0][i].PRY +
+          data["id"][0][i].PRY).toFixed(2));
+
+          if (data["id"][0][i].SueldoBruto > data["id"][0][i].SueldoBase) {
+            data["id"][0][i].SueldoBruto = data["id"][0][i].SueldoBase;
+          }
+        let SumaTotalDeLosConceptosDelTareo = 
+          data["id"][0][i].SueldoBruto +
+          data["id"][0][i].DescansosMedicos +         
           data["id"][0][i].DCGH +
           data["id"][0][i].DescansosMedicos +
           data["id"][0][i].DescansosProgramados +
@@ -428,9 +426,8 @@ class PlanillaController {
 
         data["id"][0][i].CompensacionesAdicionales =
           data["id"][0][i].AsignacionFamiliar;
-        data["id"][0][i].Asegurable =
-          SumaTotalDeLosConceptosDelTareo +
-          parseFloat(data["id"][0][i].MontoTotalHorasExtras);
+        data["id"][0][i].Asegurable = parseFloat((SumaTotalDeLosConceptosDelTareo +
+          parseFloat(data["id"][0][i].MontoTotalHorasExtras)).toFixed(2));
         console.log("ASEGURARBLE: ", data["id"][0][i].Asegurable);
         data["id"][0][i].EsSalud = (data["id"][0][i].Asegurable * 0.09).toFixed(
           2
@@ -440,8 +437,48 @@ class PlanillaController {
           data["id"][0][i].SueldoTareado *
           data["id"][0][i].PorcentajeDeDescuento
         ).toFixed(2);
-
+        switch (data["id"][0][i].idFondoDePension) {
+            case 1:
+              data["id"][0][i].ONP = data["id"][0][i].DescuentoAFP;
+              data["id"][0][i].AFPIntegra = 0;
+              data["id"][0][i].AFPPrima = 0;
+              data["id"][0][i].AFPHabitad = 0;
+              data["id"][0][i].AFPProfuturo = 0;
+              break;
+            case 2:
+              data["id"][0][i].ONP = 0;
+              data["id"][0][i].AFPIntegra = data["id"][0][i].DescuentoAFP;
+              data["id"][0][i].AFPPrima = 0;
+              data["id"][0][i].AFPHabitad = 0;
+              data["id"][0][i].AFPProfuturo = 0;
+              break;
+            case 3:
+              data["id"][0][i].ONP = 0;
+              data["id"][0][i].AFPIntegra = 0;
+              data["id"][0][i].AFPPrima = 0;
+              data["id"][0][i].AFPHabitad = data["id"][0][i].DescuentoAFP;
+              data["id"][0][i].AFPProfuturo = 0;
+              break;  
+            case 4:
+              data["id"][0][i].ONP = 0;
+              data["id"][0][i].AFPIntegra = 0;
+              data["id"][0][i].AFPPrima = data["id"][0][i].DescuentoAFP;
+              data["id"][0][i].AFPHabitad = 0;
+              data["id"][0][i].AFPProfuturo = 0;
+              break;   
+            case 4:
+              data["id"][0][i].ONP = 0;
+              data["id"][0][i].AFPIntegra = 0;
+              data["id"][0][i].AFPPrima = 0;
+              data["id"][0][i].AFPHabitad = 0;
+              data["id"][0][i].AFPProfuturo = data["id"][0][i].DescuentoAFP;
+              break;       
+          }
         /**
+         * 2	AFP INTEGRA
+3	AFP HABITAD
+4	AFP PRIMA
+5	AFP PROFUTURO
          * Funcion para el calculo de Quinta Categoria
          */
         const UIT = 4950; // Unidad Impositiva Tributaria

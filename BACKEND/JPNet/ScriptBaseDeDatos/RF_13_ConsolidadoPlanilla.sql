@@ -8,6 +8,7 @@ IN ApellidoPaterno_IN varchar(45) ,
 IN ApellidoMaterno_IN varchar(45) ,
 IN Nombres_IN varchar(45) ,
 IN RemuneracionBasica_IN varchar(45) ,
+IN MMG_IN varchar(45) ,
 IN PRY_IN varchar(45) ,
 IN MCP_IN varchar(45) ,
 IN MCB_IN varchar(45) ,
@@ -51,7 +52,7 @@ BEGIN
 		DELETE FROM planillaconsolidadada WHERE idplanilla = idConsolidado;
 	END IF;
 	INSERT INTO jpingenieria_consolidadodeplanillajpnet.planillaconsolidadada(
-				Periodo ,DNI , ApellidoPaterno ,ApellidoMaterno, Nombres ,RemuneracionBasica ,
+				Periodo ,DNI , ApellidoPaterno ,ApellidoMaterno, Nombres ,RemuneracionBasica ,MMG,
 				PRY ,MCP ,MCB ,AQP ,Total , SueldoBruto ,Dias_DCGH , Monto_DCGH ,
 				Dias_Vacaciones,Monto_Vacaciones ,Dias_FeriadosTrabajados ,Monto_FeriadosTrabajadaos , 
 				Dias_Descansos,Monto_Descansos,AsignacionFamiliar ,Vacaciones_Compensacion ,
@@ -62,7 +63,7 @@ BEGIN
 				PensionAlimenticia ,TotalNeto ,EsSalud)
                 values(
 				Periodo_IN ,DNI_IN ,ApellidoPaterno_IN ,ApellidoMaterno_IN ,Nombres_IN ,RemuneracionBasica_IN ,
-				PRY_IN ,MCP_IN ,MCB_IN ,AQP_IN ,Total_IN ,SueldoBruto_IN ,Dias_DCGH_IN ,Monto_DCGH_IN ,
+                MMG_IN,	PRY_IN ,MCP_IN ,MCB_IN ,AQP_IN ,Total_IN ,SueldoBruto_IN ,Dias_DCGH_IN ,Monto_DCGH_IN ,
 				Dias_Vacaciones_IN ,Monto_Vacaciones_IN ,Dias_FeriadosTrabajados_IN ,Monto_FeriadosTrabajadaos_IN ,
 				Dias_Descansos_IN ,Monto_Descansos_IN ,AsignacionFamiliar_IN ,Vacaciones_Compensacion_IN ,
 				Monto_Compensacion_IN ,HoraExtras_25_IN ,HoraExtra_35_IN ,MontoHorasExtras_IN ,
@@ -72,6 +73,8 @@ BEGIN
 				PensionAlimenticia_IN ,TotalNeto_IN ,EsSalud_IN    );
 END//
 DELIMITER ;
+
+
 
 
 	INSERT INTO jpingenieria_consolidadodeplanillajpnet.planillaconsolidadada(
@@ -101,10 +104,10 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS VerConsolidadoTotalConsolidadoPorPeriodo;
 CREATE PROCEDURE VerConsolidadoTotalConsolidadoPorPeriodo(IN PERIODO_IN INT)
 BEGIN
-	SELECT * FROM planillaconsolidadada WHERE Periodo=PERIODO_IN;
+	SELECT * FROM planillaconsolidadada WHERE Periodo=PERIODO_IN ORDER BY ApellidoPaterno ,ApellidoMaterno ASC;
 END//
 DELIMITER ;
-  
+  SELECT * FROM planillaconsolidadada WHERE Periodo=2 ORDER BY ApellidoPaterno ASC,Nombres ASC ;
   CALL VerConsolidadoTotalConsolidadoPorPeriodo(2);
 
 

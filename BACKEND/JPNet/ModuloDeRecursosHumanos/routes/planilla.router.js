@@ -90,7 +90,7 @@ router.get("/personas", async (req, res) => {
     const info = await planillaController.obtenerPreGeneradoDePlanilla(
       req.query.FechaInicio,
       req.query.FechaFin,
-      req.body.Periodo
+      req.query.Periodo
     );
     res.setHeader("Content-Type", "application/json");
     if (info.status == null || info.status == "error" || info.id == null) {
