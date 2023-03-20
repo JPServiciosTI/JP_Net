@@ -30,6 +30,7 @@ IN HoraExtras_25_IN varchar(45) ,
 IN HoraExtra_35_IN varchar(45) ,
 IN MontoHorasExtras_IN varchar(45) ,
 IN RemuneracionAsegurable_IN varchar(45) ,
+IN EntidadFondo_IN VARCHAR(45),
 IN AFPHabitad_IN varchar(45) ,
 IN AFPIntegra_IN varchar(45) ,
 IN AFPPrima_IN varchar(45) ,
@@ -58,7 +59,7 @@ BEGIN
 				Dias_Descansos,Monto_Descansos,AsignacionFamiliar ,Vacaciones_Compensacion ,
 				Monto_Compensacion ,HoraExtras_25 ,HoraExtra_35 ,MontoHorasExtras ,
 				RemuneracionAsegurable,
-				AFPHabitad ,AFPIntegra ,AFPPrima ,AFPProfuturo,ONP,
+				NombreDeLaEntidadDeFondo,AFPHabitad ,AFPIntegra ,AFPPrima ,AFPProfuturo,ONP,
 				ImpuestoDeQuinta ,DevolucionQuinta,Adelantos ,Prestamos ,DescuentosCuentasARendir ,DescuentosRecursosHumanos ,
 				PensionAlimenticia ,TotalNeto ,EsSalud)
                 values(
@@ -67,7 +68,7 @@ BEGIN
 				Dias_Vacaciones_IN ,Monto_Vacaciones_IN ,Dias_FeriadosTrabajados_IN ,Monto_FeriadosTrabajadaos_IN ,
 				Dias_Descansos_IN ,Monto_Descansos_IN ,AsignacionFamiliar_IN ,Vacaciones_Compensacion_IN ,
 				Monto_Compensacion_IN ,HoraExtras_25_IN ,HoraExtra_35_IN ,MontoHorasExtras_IN ,
-				RemuneracionAsegurable_IN ,
+				RemuneracionAsegurable_IN ,EntidadFondo_IN,
 				AFPHabitad_IN ,AFPIntegra_IN ,AFPPrima_IN ,AFPProfuturo_IN ,ONP_IN ,
 				ImpuestoDeQuinta_IN ,DevolucionQuinta_IN ,Adelantos_IN ,Prestamos_IN ,DescuentosCuentasARendir_IN ,DescuentosRecursosHumanos_IN ,
 				PensionAlimenticia_IN ,TotalNeto_IN ,EsSalud_IN    );
@@ -104,7 +105,7 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS VerConsolidadoTotalConsolidadoPorPeriodo;
 CREATE PROCEDURE VerConsolidadoTotalConsolidadoPorPeriodo(IN PERIODO_IN INT)
 BEGIN
-	SELECT * FROM planillaconsolidadada WHERE Periodo=PERIODO_IN ORDER BY ApellidoPaterno ,ApellidoMaterno ASC;
+	SELECT * FROM planillaconsolidadada WHERE Periodo=PERIODO_IN ORDER BY ApellidoPaterno ASC,Nombres ASC;
 END//
 DELIMITER ;
   SELECT * FROM planillaconsolidadada WHERE Periodo=2 ORDER BY ApellidoPaterno ASC,Nombres ASC ;

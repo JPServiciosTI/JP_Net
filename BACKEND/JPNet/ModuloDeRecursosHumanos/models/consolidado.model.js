@@ -29,6 +29,7 @@ class ConsolidadoModel {
     HoraExtra_35,
     MontoHorasExtras,
     RemuneracionAsegurable,
+    NombreEntidadDePensiones,
     AFPHabitad,
     AFPIntegra,
     AFPPrima,
@@ -47,7 +48,7 @@ class ConsolidadoModel {
     try {
       const con = connectionDb.promise();
       const data = await con.query(
-        "CALL RegistrarConsolidado( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "CALL RegistrarConsolidado( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         [
           Periodo,
           DNI,
@@ -77,6 +78,7 @@ class ConsolidadoModel {
           HoraExtra_35,
           MontoHorasExtras,
           RemuneracionAsegurable,
+          NombreEntidadDePensiones,
           AFPHabitad,
           AFPIntegra,
           AFPPrima,
@@ -93,6 +95,7 @@ class ConsolidadoModel {
           EsSalud,
         ]
       );
+      
       return { status: "ok", id: data[0] };
     } catch (error) {
       console.log(error);

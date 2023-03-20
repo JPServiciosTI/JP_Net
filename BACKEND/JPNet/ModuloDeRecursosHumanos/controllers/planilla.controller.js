@@ -44,7 +44,7 @@ class PlanillaController {
       console.log("Controller Error: ", err);
       return { status: "error Empleados", id: null };
     });
-    //console.log(dataEmpleados.id[0]);
+
 
     for (let i = 0; i < dataEmpleados.id[0].length; i++) {
       try {
@@ -316,13 +316,10 @@ class PlanillaController {
           return { status: "error", id: null };
         });
 
-        console.log("Faltas> ", dataFaltas["id"][0].Faltas);
         data["id"][0][i].Faltas = dataFaltas["id"][0].Faltas;
-        // console.log("Faltas> ", data["id"][0][i].Faltas);
         data["id"][0][i].Tardanza = dataTardanza["id"][0].Tardanzas || 0;
-        //console.log("Que fue del periodo:? ", DNI_IN, data3["id"][0]);
         data["id"][0][i].Periodo = Periodo_IN;
-        console.log("DNI", DNI_IN, "Sueldo: ", data3["id"][0].SueldoBruto);
+
         if (data["id"][0][i].SueldoBase <= (data3["id"][0].SueldoBruto || 0)) {
           data["id"][0][i].SueldoTareado = data["id"][0][i].SueldoBase;
         } else {
@@ -341,7 +338,7 @@ class PlanillaController {
             return { status: "error", id: null };
           });
         let SueldoPorDia = data["id"][0][i].SueldoBase / diasDeDiferencia;
-        //console.log(dataTotalDeCompensacionesAdicionales["id"][0])
+
         data["id"][0][i].MMG =  dataTotalDeCompensacionesAdicionales["id"][0][0].MMG * SueldoPorDia ||  0;
         data["id"][0][i].MMGContado =  dataTotalDeCompensacionesAdicionales["id"][0][0].MMG ||  0;
         data["id"][0][i].MCP =  dataTotalDeCompensacionesAdicionales["id"][0][0].MCP * SueldoPorDia || 0;
@@ -380,19 +377,6 @@ class PlanillaController {
           data["id"][0][i].DescansosProgramados +
           data["id"][0][i].FeriadosTrabajados +
           data["id"][0][i].Vacaciones;
-          console.log("Que Fue: ",           
-          data["id"][0][i].SueldoTareado +
-          data["id"][0][i].DescansosMedicos ,
-          data["id"][0][i].MMG ,
-          data["id"][0][i].MCP ,
-          data["id"][0][i].MCB ,
-          data["id"][0][i].PRY ,
-          data["id"][0][i].DCGH ,
-          data["id"][0][i].DescansosMedicos ,
-          data["id"][0][i].DescansosProgramados ,
-          data["id"][0][i].FeriadosTrabajados ,
-          data["id"][0][i].Vacaciones)
-          console.log("SumaTotalDeLosConceptosDelTareo: ",SumaTotalDeLosConceptosDelTareo);
 
         let calculoHoraDelEmpleado = data["id"][0][i].SueldoBase / 30 / 8;
         let CalculoHoras25 =
@@ -428,11 +412,10 @@ class PlanillaController {
           data["id"][0][i].AsignacionFamiliar;
         data["id"][0][i].Asegurable = parseFloat((SumaTotalDeLosConceptosDelTareo +
           parseFloat(data["id"][0][i].MontoTotalHorasExtras)).toFixed(2));
-        console.log("ASEGURARBLE: ", data["id"][0][i].Asegurable);
+
         data["id"][0][i].EsSalud = (data["id"][0][i].Asegurable * 0.09).toFixed(
           2
         );
-        console.log("ESSALUD: ", data["id"][0][i].EsSalud);
         data["id"][0][i].DescuentoAFP = (
           data["id"][0][i].SueldoTareado *
           data["id"][0][i].PorcentajeDeDescuento
@@ -474,13 +457,7 @@ class PlanillaController {
               data["id"][0][i].AFPProfuturo = data["id"][0][i].DescuentoAFP;
               break;       
           }
-        /**
-         * 2	AFP INTEGRA
-3	AFP HABITAD
-4	AFP PRIMA
-5	AFP PROFUTURO
-         * Funcion para el calculo de Quinta Categoria
-         */
+
         const UIT = 4950; // Unidad Impositiva Tributaria
         let MontoSupuesto = data["id"][0][i].SueldoBase * 12;
         let GratificacionesEstimada = data["id"][0][i].SueldoBase * 2;
@@ -495,7 +472,6 @@ class PlanillaController {
         const maximoPorTramo = [0, 5, 20, 35, 45, 1000000];
         let SaldoRestante = SaldoGravado;
         let SumaDelImpuesto = 0;
-        //console.log("Total: ",MontoSupuesto+GratificacionesEstimada,"Gravado: ",SaldoGravado);
         for (let i = 0; i < tramoIngreso.length; i++) {
           if (SaldoGravado <= 0) {
             break;
@@ -528,16 +504,9 @@ class PlanillaController {
         ).toFixed(2);
         data["id"][0][i].NetoTotal =
           data["id"][0][i].Asegurable - data["id"][0][i].TotalDescuentos;
-        console.log(
-          "ASEGF: ",
-          data["id"][0][i].Asegurable,
-          "DESC: ",
-          data["id"][0][i].TotalDescuentos
-        );
         data["id"][0][i].NetoTotal = parseFloat(
           data["id"][0][i].NetoTotal
         ).toFixed(2);
-        console.log("Neto: ", data["id"][0][i].NetoTotal);
         /*
         const resultDescuentos = descuentoDb.createDescuentoDeLey(
           data["id"][0][i].Periodo,

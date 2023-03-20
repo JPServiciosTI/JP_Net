@@ -19,7 +19,7 @@ BEGIN
     SET ID_Contrato = (SELECT idContrato FROM contrato  WHERE idEmpleado = idEmpleado_IN AND idCondicionDeContrato > 1);
 	SELECT * FROM tareo TRE WHERE TRE.idContrato = ID_Contrato AND TRE.Fecha >= FECHA_IN AND FechaFIN >= TRE.Fecha ORDER BY TRE.Fecha ASC;
 END//
- DELIMITER ; 
+DELIMITER ; 
 CALL VerTareadoHistoricoTrabajadorCesado('2023-01-16','2023-02-15',1);
 UPDATE tareo SET HoraDeIngreso='7:30:00', HoraDeInicioDeAlmuerzo='13:06:00',HoraDeFinDEAlmuerzo='13:36:00',HoraDeSalida='16:36:00',idEstacionDeTrabajo=1 WHERE idTareo=2;
 

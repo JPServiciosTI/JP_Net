@@ -24,8 +24,8 @@ BEGIN
     
 	START TRANSACTION;
 		SET ID_Contrato = (SELECT idContrato FROM contrato  WHERE idEmpleado = idEmpleado_IN AND idCondicionDeContrato = 1);
-		INSERT INTO jpingenieria_jpnet2023.licenciasingocedehaber(FechaDeInicioConGoceDeHaber,
-        FechasDeFinConGoceDeHaber,
+		INSERT INTO licenciacongocedehaber(FechaDeInicioConGoceDeHaber,
+        FechaDeFinConGoceDeHaber,
         LinkDelDocumento
         ) 
         VALUES (FechaDeInicioConGoceDeHaber_IN,
@@ -36,4 +36,15 @@ BEGIN
 		COMMIT;
 END//
 DELIMITER ;
+SELECT idContrato FROM contrato  WHERE idEmpleado = 19 AND idCondicionDeContrato = 1;
+INSERT INTO jpingenieria_jpnet2023.licenciacongocedehaber(FechaDeInicioConGoceDeHaber,  FechaDeFinConGoceDeHaber, LinkDelDocumento ) VALUES ("2023-01-28","2023-01-30","AdjntoPruebas");
 
+		INSERT INTO licenciacongocedehaber(FechaDeInicioConGoceDeHaber,
+        FechaDeFinConGoceDeHaber,
+        LinkDelDocumento
+        ) 
+        VALUES ("2023-01-28","2023-01-30","AdjntoPruebas");
+SELECT idLicenciaConGoceDeHaber FROM licenciacongocedehaber ORDER BY idLicenciaConGoceDeHaber DESC LIMIT 1;
+UPDATE tareo TRA SET idCondicionDeTareo = 6,idLicenciaConGoceDeHaber = 25 WHERE "2023-01-28"  <= TRA.Fecha AND TRA.Fecha <= "2023-01-30" AND TRA.idContrato = 19;
+
+CALL RegistrarLicenciasConGoceDeHaber("2023-01-28","2023-01-30","AdjntoPruebas",19);
