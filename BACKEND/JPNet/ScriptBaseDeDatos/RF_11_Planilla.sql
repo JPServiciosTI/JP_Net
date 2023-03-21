@@ -18,6 +18,27 @@ END//
  DELIMITER ;
  CALL ObtenerEmpleadosParaPlanilla(0,100);
  
+ USE jpingenieria_jpnet2023;
+DELIMITER //
+DROP PROCEDURE IF EXISTS ObtenerDatosPersona;
+CREATE PROCEDURE VerTareadoHistoricoTrabajadorActivo(IN FECHA_IN DATE, IN FechaFIN DATE, IN idEmpleado_IN INT)
+BEGIN
+	DECLARE ID_Contrato INT;
+    SET ID_Contrato = (SELECT idContrato FROM contrato  WHERE idEmpleado = idEmpleado_IN AND idCondicionDeContrato = 1);
+	SELECT idTareo ,date_format(Fecha, "%d-%m-%Y") as Fecha,HoraDeIngreso, HoraDeInicioDeAlmuerzo, HoraDeFinDeAlmuerzo, HoraDeSalida FROM tareo TRE WHERE TRE.Fecha >= FECHA_IN AND FechaFIN >= TRE.Fecha;
+END//
+DELIMITER ;
+
+USE jpingenieria_jpnet2023;
+DELIMITER //
+DROP PROCEDURE IF EXISTS ObtenerPersonaParaCalculoDePlanilla;
+CREATE PROCEDURE ObtenerPersonaParaCalculoDePlanilla(IN idEmpleado_IN INT)
+BEGIN
+	DECLARE ID_Contrato INT;
+    SET ID_Contrato = (SELECT idContrato FROM contrato  WHERE idEmpleado = idEmpleado_IN AND idCondicionDeContrato = 1);
+	SELECT * FROM contrato CT INNER JOIN datoscontables ON ;
+END//
+ DELIMITER ;
  
  USE jpingenieria_jpnet2023;
 DELIMITER //
